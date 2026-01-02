@@ -25,11 +25,13 @@ Compiler phases systematically eliminate ambiguity, transforming the program int
 Source text: `x=3+4*5`
 
 **Ambiguity:** Where does one symbol end and another begin?
+
 - Is it `x`, `=`, `3`, `+`, `4`, `*`, `5`?
 - Or `x=3`, `+4*`, `5`?
 - Or something else entirely?
 
 **Resolution:** Lexing
+
 - **Input:** Character stream
 - **Output:** Token stream with explicit boundaries
 - **Result:** `IDENT(x) EQUALS INT(3) PLUS INT(4) STAR INT(5)`
@@ -39,11 +41,13 @@ Source text: `x=3+4*5`
 Token stream: `x EQUALS 3 PLUS 4 STAR 5`
 
 **Ambiguity:** How do operators bind?
+
 - Is it `x = (3 + 4) * 5`? (Result: 35)
 - Or `x = 3 + (4 * 5)`? (Result: 23)
 - Or `(x = 3) + (4 * 5)`? (Nonsensical)
 
 **Resolution:** Parsing
+
 - **Input:** Token stream
 - **Output:** Tree structure with explicit precedence
 - **Result:** `Assign(x, Add(Int(3), Mul(Int(4), Int(5))))`
@@ -51,7 +55,8 @@ Token stream: `x EQUALS 3 PLUS 4 STAR 5`
 ### Structure is ambiguous about meaning
 
 Parse tree:
-```
+
+``` txt
 Assign(
   name = "x",
   value = Add(Ident("y"), Int(1))
@@ -59,12 +64,14 @@ Assign(
 ```
 
 **Ambiguity:** What do the names refer to?
+
 - Does `x` exist? Was it declared?
 - What is `y`? What type does it have?
 - Can you add `y` to an integer?
 - Is `x` allowed to be modified?
 
 **Resolution:** Semantic analysis
+
 - **Input:** Parse tree
 - **Output:** Annotated tree + symbol table
 - **Result:** Names resolved, types checked, constraints validated
@@ -72,16 +79,19 @@ Assign(
 ### High-level structure is ambiguous about execution
 
 Semantic tree with meaning:
-```
+
+``` txt
 Assign(x: int, Add(y: int, Int(1)))
 ```
 
 **Ambiguity:** How should this execute?
+
 - What is the order of evaluation?
 - Are there dependencies between statements?
 - Can subexpressions be reordered or eliminated?
 
 **Resolution:** IR translation
+
 - **Input:** Annotated AST
 - **Output:** Control-flow graph with explicit data flow
 - **Result:** Three-address code or SSA form
@@ -89,18 +99,21 @@ Assign(x: int, Add(y: int, Int(1)))
 ### IR is ambiguous about efficiency
 
 Three-address code:
-```
+
+``` txt
 t1 = 4 * 5
 t2 = 3 + t1
 x = t2
 ```
 
 **Ambiguity:** Is this the fastest representation?
+
 - Can `t2` be eliminated?
 - Can constants be folded?
 - Are there redundant computations?
 
 **Resolution:** Optimization
+
 - **Input:** IR
 - **Output:** Transformed IR (same meaning, better performance)
 - **Result:** `x = 23` (constant folded)
@@ -110,11 +123,13 @@ x = t2
 Optimized IR: `x = 23`
 
 **Ambiguity:** How does this map to machine instructions?
+
 - Which register should hold `23`?
 - Where in memory is `x` located?
 - What is the exact instruction encoding?
 
 **Resolution:** Code generation
+
 - **Input:** Optimized IR
 - **Output:** Machine code
 - **Result:** `mov dword ptr [rbp-4], 23`
@@ -161,14 +176,17 @@ Each error is a different kind of ambiguity the compiler could not resolve.
 ## Anti-patterns to avoid
 
 ### Trying to do semantic analysis during parsing
+
 Parsing builds structure; semantics requires structure to already exist.
 Mixing the two creates fragile, order-dependent logic.
 
 ### Expecting the compiler to "figure it out"
+
 Compilers enforce rules. They do not guess.
 If the language says "`int + string` is illegal," the compiler will reject it—even if a human could infer intent.
 
 ### Treating phases as optional
+
 Even the smallest language needs all phases.
 You can make phases simpler, but you cannot eliminate them.
 
