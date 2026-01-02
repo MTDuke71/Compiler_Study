@@ -9,7 +9,7 @@
   - [[02-lexing/tokens-vs-characters]]
   - [[03-parsing/trees-vs-structure]]
   - [[zettel/Z0003-representation]]
-- Down: [[02-lexing/tokens-vs-characters]]
+- Down: [[01-foundations/day-03-structure-to-meaning]]
 
 ## Goal
 
@@ -48,13 +48,34 @@ x = 3 + 4 * 5
 
 ### Tokens (lexing output)
 
-One reasonable token sequence:
+Each token carries its type, value, and source location (line/column) for error reporting:
+
+```txt
+Token { type: IDENT, value: "x",  line: 1, col: 0 }
+Token { type: EQUALS, value: "=", line: 1, col: 2 }
+Token { type: INT, value: 3,      line: 1, col: 4 }
+Token { type: PLUS, value: "+",   line: 1, col: 6 }
+Token { type: INT, value: 4,      line: 1, col: 8 }
+Token { type: STAR, value: "*",   line: 1, col: 10 }
+Token { type: INT, value: 5,      line: 1, col: 12 }
+```
+
+Simplified notation (locations omitted):
 
 ```txt
 IDENT(x)  EQUALS  INT(3)  PLUS  INT(4)  STAR  INT(5)
 ```
 
 Whitespace mostly disappears; meaning is not assigned yet.
+
+**Why source locations matter:** These locations must be threaded through *every* compiler phase:
+
+- Parser copies them to AST nodes
+- Semantic analyzer uses them for error messages ("undefined variable 'x' at line 10, col 5")
+- IR translation preserves them for debugger support
+- Code generation emits debug metadata linking machine code back to source
+
+Without location tracking, all errors would just say "syntax error" with no context.
 
 ### Structure (parsing output)
 
