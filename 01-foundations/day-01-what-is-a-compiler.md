@@ -18,19 +18,20 @@ Most compilers have these six phases:
 1) **Lexing** turns a stream of characters into tokens.  
    It defines where symbols begin and end.
 
-2) **Parsing** turns tokens into structure.  
-   It defines grouping and operator binding.
+2) **Parsing** turns tokens into structure (AST).  
+   It defines grouping and operator binding.  
+   **AST** (Abstract Syntax Tree) is a tree representation of the program's structure where each node represents a construct in the source code (expression, statement, etc.).
 
-3) **Semantic analysis** adds meaning to structure.  
+3) **Semantic analysis** adds meaning (Annotated AST) to structure.  
    It resolves names, checks scopes, and enforces rules such as type constraints.
 
-4) **Intermediate representation (IR)** converts meaning into a form that is easy to analyze and transform.  
+4) **Intermediate representation (IR) Translation** converts meaning into a form that is easy to analyze and transform.  
    It standardizes control flow and data flow.
 
 5) **Optimization** improves efficiency without changing meaning.  
    It removes waste and simplifies computation.
 
-6) **Code generation** turns the IR into machine-level instructions.  
+6) **Code generation** turns the Optimized IR into machine-level instructions.  
    It targets the calling convention, register set, and architecture.
 
 These phases exist because each one reduces ambiguity that the next cannot afford.

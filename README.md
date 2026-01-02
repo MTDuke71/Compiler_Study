@@ -2,7 +2,7 @@
 
 ## Links
 
-- Up: [[...]]
+- Up: None, This is the Root Note
 - Related: [[00-index/README]] [[01-foundations/README]]
 - Down: [[00-index/README]]
 
