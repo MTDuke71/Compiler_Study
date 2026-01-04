@@ -173,10 +173,32 @@ If you’re here to build understanding, welcome.
 
 ---
 
+## Target Language: Decaf
+
+When moving from concepts to implementation, this repository targets the **Decaf** language specification—a pedagogical language designed for compiler construction courses.
+
+**Decaf Specification:**  
+Based on MIT 6.035 (Computer Language Engineering), Fall 2005  
+Available under MIT OpenCourseWare: [Decaf Language Specification](https://ocw.mit.edu/courses/6-035-computer-language-engineering-sma-5502-fall-2005/resources/decaf_spec/)
+
+**Why Decaf:**
+- Small enough to implement completely
+- Large enough to cover all compiler phases
+- Well-specified and unambiguous
+- Designed explicitly for learning
+- Balances simplicity with real-world concepts
+
+The specification is used under the MIT OpenCourseWare Creative Commons license for educational purposes. All compiler implementation code in this repository is original work.
+
+---
+
 ## License
 
 Content is provided for learning and exploration.  
 Reuse is encouraged. Attribution is appreciated.
+
+**Third-Party Materials:**  
+Decaf language specification © MIT OpenCourseWare, used under Creative Commons license for educational purposes.
 
 ---
 

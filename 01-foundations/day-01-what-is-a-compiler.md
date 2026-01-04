@@ -57,3 +57,79 @@ Small languages do not eliminate phases; they only shrink their scope.
 - You can describe why phases exist without memorizing their names.  
 - Diagrams feel descriptive, not mysterious.  
 - You feel oriented rather than informed.
+
+---
+
+## Exercise Answers & Review
+
+### Exercise 1.1.1: Difference between compiler and interpreter
+
+**My Answer:**  
+Compiler translates source code to machine code. Interpreter does not generate machine code as the final step.
+
+**Review:**  
+✓ Correct that compilers generate machine code while interpreters don't as final output  
+💡 **Missing key point**: The behavioral difference—compilers translate the *entire* program first (creating an executable), then run it separately. Interpreters execute source code *directly* without creating a standalone executable.
+
+---
+
+### Exercise 1.1.2: Advantages of compiler vs interpreter
+
+**My Answer:**  
+Compiler is faster. Interpreter has better error messages because it executes statement by statement.
+
+**Review:**  
+✓ Correct that compiled code runs faster  
+✓ Good observation about interpreter error messages  
+💡 **Additional advantages**:
+- **Compiler advantages**: optimizations, no runtime overhead, can distribute without source code
+- **Interpreter advantages**: faster development cycle (no compilation step), better portability, easier debugging, dynamic features
+
+---
+
+### Exercise 1.1.3: Assembly language vs machine language
+
+**My Answer:**  
+Assembler can use macros and link with other files easier.
+
+**Review:**  
+⚠️ Partially correct, but missing the main point  
+💡 **Key advantage**: **Portability**—assembly can be assembled for different target machines, while machine code is architecture-specific. Assembly also provides:
+- Symbolic references (labels instead of addresses)
+- Macro expansion
+- Readable mnemonics vs binary opcodes
+- Easier maintenance and debugging
+
+---
+
+### Exercise 1.1.4: C as target language
+
+**My Answer:**  
+Can write in easier language like Python, but then do a final compile in lower-level language that would be faster.
+
+**Review:**  
+✓ Right direction about using easier source languages  
+💡 **Key advantages of C as target**:
+- Leverage existing C compilers (portability to many platforms)
+- Mature optimization infrastructure (decades of work in C compilers)
+- Widespread tooling (debuggers, profilers, linkers)
+- Well-understood compilation target
+- Don't need to generate machine code directly
+
+---
+
+### Exercise 1.1.5: Tasks of an assembler
+
+**My Answer:**  
+Lexing, Parsing, Semantic Analysis, Translation, Optimization, Code Generation.
+
+**Review:**  
+❌ **Wrong answer**—these are compiler phases, not assembler tasks!  
+**Assembler tasks include**:
+- Translate mnemonics (e.g., `MOV`, `ADD`) to machine opcodes
+- Resolve symbolic addresses (labels like `loop:` to actual addresses)
+- Expand macros
+- Handle assembler directives (`.data`, `.text`, etc.)
+- Perform two-pass assembly (first pass: build symbol table, second pass: generate code)
+- Calculate offsets and addresses
+- Generate object files for linking
