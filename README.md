@@ -114,6 +114,8 @@ Recommended settings:
 Use `[[wikilinks]]` freely.  
 The graph is a feature, not a side effect.
 
+The dailty notes has a template for consistent structure. [[templates/template-daily-note]]
+
 ---
 
 ## Learning Approach
