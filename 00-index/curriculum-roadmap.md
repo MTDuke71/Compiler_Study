@@ -36,7 +36,7 @@ IR and optimization—preparing code for execution
 Code generation—targeting real machines
 
 ### Phase 6: Integration (Weeks 13-16)
-Building a complete compiler, revisiting concepts, filling gaps
+Building a complete compiler (Decaf or Jack), revisiting concepts, filling gaps
 
 ---
 
@@ -399,20 +399,59 @@ Building a complete compiler, revisiting concepts, filling gaps
 ### **Week 13-14: Integration — Building a Complete Compiler**
 **Theme:** Connect all phases end-to-end
 
+**Target Language Decision:**
+
+Choose between two well-designed pedagogical languages:
+
+**Option A: Decaf (MIT 6.035)**
+- More realistic/complex language (closer to C/Java)
+- Better for learning optimization and advanced IR
+- Arrays, functions, richer type system
+- Requires runtime library or C linkage for I/O
+- Specification: [[spec/README]]
+- **Best if:** You want deeper optimization experience and don't mind additional complexity
+
+**Option B: Jack (Nand2Tetris)**
+- Simpler, faster to complete (2-3 months)
+- Complete ecosystem (compiler → VM → hardware)
+- Stack machine target (no register allocation)
+- Built-in OS API (String, Memory, Math, I/O handled)
+- Excellent test suite and course materials
+- **Best if:** You want end-to-end understanding and a guaranteed win
+
+**Recommendation:** Make this choice at Week 13 based on:
+- How comfortable you feel with Weeks 1-12 material
+- Whether you value breadth (Jack) or depth (Decaf)
+- Time constraints and energy level
+
+**For this week (whichever you choose):**
+- All previous toy implementations were practice for this
+
 **Goals:**
 - Combine lexer, parser, semantics, IR, optimization, codegen
-- Compile source programs to bytecode and execute
+- Implement full language specification (Decaf or Jack)
+- Compile source programs to target format and execute
 - Handle errors gracefully at every stage
 
 **Deliverables:**
-- A working compiler for a small language
-- Test suite covering all features
-- Documentation of design choices
+- Working compiler implementing full spec
+- Test suite covering all language features
+- Documentation of design choices and deviations from spec (if any)
+- Sample programs that compile and run correctly
+
+**Implementation Focus (adapt to chosen language):**
+- Lexer: Language keywords, operators, literals, comments
+- Parser: Full grammar (see specification)
+- Semantics: Type rules, scoping rules, semantic checks
+- IR: Lower constructs to appropriate representation
+- Codegen: Target VM code (Jack) or assembly/bytecode (Decaf)
 
 **Success Criteria:**
-- End-to-end: source → bytecode → execution
+- End-to-end: source → target code → execution
+- All spec-required features implemented
 - Errors are caught and reported meaningfully
-- You can explain every phase's role
+- Can compile and run non-trivial programs from the spec
+- You can explain every phase's role and design decisions made
 
 ---
 
@@ -420,27 +459,43 @@ Building a complete compiler, revisiting concepts, filling gaps
 **Theme:** Consolidate understanding and explore advanced topics
 
 **Activities:**
+- Complete any remaining language spec features
 - Revisit zettels and strengthen connections
-- Implement missing features (arrays, structs, etc.)
+- Add extensions or optimizations:
+  - Additional optimizations (copy propagation, CSE, strength reduction)
+  - Better error messages and recovery
+  - If Jack: Add features not in spec (floats, structs, etc.)
+  - If Decaf: Optimize more aggressively or target real assembly
 - Explore advanced topics:
-  - Garbage collection
+  - Garbage collection (especially relevant for Jack)
   - Type inference
-  - Register allocation algorithms
+  - Register allocation algorithms (especially relevant for Decaf)
   - JIT compilation
+  - Compare your implementation to other compilers
 
 **Deliverables:**
+- Complete, tested compiler for chosen language
 - Complete zettel network
 - Personal compiler design philosophy document
+- Retrospective: what you learned, what surprised you
+- (Optional) Start second compiler for other language
 - Identify areas for future deep dives
 
 **Success Criteria:**
+- Compiler is feature-complete and well-tested
 - Compiler knowledge graph is navigable and coherent
 - Can design a compiler for a new language from scratch
+- Can articulate tradeoffs made in your implementation
 - Have specific questions for further study
 
 ---
 
 ## Flexibility and Adaptation
+
+**Note on Structure:**
+- **Weeks 1-12**: Learn concepts through simple toy examples (arithmetic expressions, simple statements)
+- **Weeks 13-16**: Apply everything to the full Decaf specification
+- The toy implementations are deliberate practice before tackling a complete language
 
 This roadmap assumes:
 - ~60 minutes of focused study per day, 5-6 days per week
