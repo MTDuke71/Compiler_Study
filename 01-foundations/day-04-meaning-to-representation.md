@@ -94,6 +94,46 @@ Now:
 
 This form is easy to analyze, transform, and optimize.
 
+## Wait, goto is good now?
+
+**If you learned that "goto is harmful," you're right—but only for source code written by humans.**
+
+The confusion:
+- **1960s-1980s:** goto was common in BASIC, early C, FORTRAN
+- **1968:** Dijkstra's "Go To Statement Considered Harmful" 
+- **Modern wisdom:** Use structured control flow (if/while/for) in source code
+- **But now:** Compilers use goto everywhere in IR
+
+**Why goto is bad in source code:**
+- Makes code hard to read and follow for humans
+- Creates "spaghetti code" with arbitrary jumps
+- Breaks mental models of program flow
+- Makes debugging and maintenance difficult
+- Obscures intent (is this a loop? a conditional? error handling?)
+
+**Why goto is good in IR:**
+- Makes control flow **explicit** and **analyzable** by the compiler
+- Provides a **uniform primitive** that all control structures lower to
+- Enables optimization: the compiler can see all possible execution paths
+- Simplifies code generation: every control structure is just labels and jumps
+- Is **never read by humans** (only by compiler passes)
+
+**The key insight:**
+- High-level code (`while`, `if`, `for`) is for **humans** to write and understand
+- Low-level code (goto, labels) is the **reality** of how CPUs execute
+- The compiler's job is to translate human-friendly → machine-friendly
+
+Your C64 BASIC instincts were right for that context! goto is the natural way CPUs think.
+Modern programming languages hide goto behind structured constructs to make code easier for humans.
+But inside the compiler, it all becomes goto again—because that's what the machine actually does.
+
+**Analogy:**
+- Writing source code with goto: like writing directions as "turn at mile marker 47.3"
+- Writing source code with `while`: like writing "turn at the red barn"
+- The compiler converts both to absolute addresses (goto) because that's what the CPU needs
+
+You're not going backwards—you're seeing what was always happening under the hood! 🎯
+
 ## Why IR exists: uniformity and simplicity
 
 The AST has dozens of node types:
@@ -149,6 +189,7 @@ Because IR is uniform and explicit, optimizations become simple transformations:
 - **Constant folding:** `t1 = 3 + 4` → `t1 = 7`
 - **Dead code elimination:** If `t1` is never used, delete the assignment.
 - **Common subexpression elimination:** If `t1 = a + b` appears twice, compute it once.
+- **Loop-invariant code motion:** If `t1 = a + b` is computed in a loop but `a` and `b` never change, move it outside the loop.
 
 These are hard to implement on the AST because syntax obscures data flow.
 

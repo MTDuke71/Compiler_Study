@@ -146,6 +146,61 @@ Each phase depends on the guarantees established by the previous one:
 
 Skipping a phase does not simplify the compiler—it makes the next phase impossible.
 
+## Phase contracts and invariants
+
+Each phase has a **contract**: what it expects as input and what it guarantees as output.
+
+### Lexing
+- **Expects:** Valid character encoding (UTF-8, ASCII, etc.)
+- **Guarantees:** Well-formed token stream with source locations
+- **Preserves:** Nothing from input (first phase)
+- **Transforms:** Characters → Tokens
+
+### Parsing  
+- **Expects:** Valid token stream
+- **Guarantees:** Valid syntax tree (or error if syntax is invalid)
+- **Preserves:** Token identities and values
+- **Transforms:** Flat sequence → Tree structure
+
+### Semantic Analysis
+- **Expects:** Valid syntax tree
+- **Guarantees:** Type-safe, name-resolved AST (or error if semantics invalid)
+- **Preserves:** Syntactic structure
+- **Transforms:** Untyped/unresolved → Typed/resolved
+
+### IR Translation
+- **Expects:** Type-safe, name-resolved AST
+- **Guarantees:** Valid control-flow graph with explicit data flow
+- **Preserves:** Program meaning (semantics)
+- **Transforms:** Implicit control flow → Explicit control flow
+
+### Optimization
+- **Expects:** Valid IR
+- **Guarantees:** Equivalent IR (same behavior, potentially better performance)
+- **Preserves:** Program meaning (observable behavior)
+- **Transforms:** Inefficient → Efficient
+
+### Code Generation
+- **Expects:** Valid (optimized) IR
+- **Guarantees:** Valid machine code for target architecture
+- **Preserves:** Program meaning
+- **Transforms:** Virtual operations → Physical instructions
+
+**Key insight:** Each phase can **assume** its input satisfies the previous phase's guarantees. This is why phases cannot be reordered—the assumptions would break.
+
+### Information flow between phases
+
+What actually flows from one phase to the next?
+
+1. **Lexing → Parsing:** Token stream + source locations (for error messages)
+2. **Parsing → Semantics:** AST nodes + token metadata (types, positions)
+3. **Semantics → IR:** Annotated AST + symbol table + type information
+4. **IR → Optimization:** CFG + data flow facts
+5. **Optimization → Codegen:** CFG + liveness info + register hints
+6. **Codegen → Linker:** Object code + symbol tables + relocation info
+
+Notice: **source locations** are preserved through every phase (for debugging and error reporting), even though they're not part of the core transformation.
+
 ## Key insight: precision has a cost
 
 Each phase trades **conciseness** for **precision**:
