@@ -79,6 +79,28 @@ Every note includes a "Links" section at the top:
 
 ## Learning Approach
 
+### Passive but Questioning
+
+The learning philosophy is **passive learning with depth** over active exercises:
+- Read comprehensive, detailed explanations
+- Daily notes are pre-filled for reading (not templates to complete)
+- Use repetition with variation (training document + daily note synthesis)
+- Encourage questioning and exploration, not rote memorization
+
+**Why this works:** Reading complete content twice (once detailed, once condensed) creates stronger encoding and retention through spaced repetition with different framing.
+
+### Implementation Cycle (Week 3+)
+
+**Read → Run → Modify → Understand**
+1. **Read:** Complete, working code with thorough comments
+2. **Run:** Execute and observe behavior
+3. **Modify:** Request changes, experiment with variations
+4. **Understand:** Through iteration, internalize patterns
+
+Not copy-paste tutorials, but code you can read, run, break, fix, and extend.
+
+### V-Cycle Model
+
 Follows a **V-cycle learning model**:
 1. Start with top-down mental model
 2. Descend into concrete mechanisms
@@ -97,6 +119,39 @@ Each phase removes specific ambiguity:
 6. **Codegen**: targets the machine
 
 The pipeline is not optional; it is the minimum sequence that makes execution possible.
+
+## Cross-Domain Analogies
+
+The user has deep expertise in:
+1. **Chess engine development** - perft testing, evaluation functions, search depth
+2. **Advent of Code optimization** - profiling, measuring, finding simple wins
+
+**Use these analogies extensively** when explaining compiler concepts:
+
+### Chess Engine ↔ Compiler Parallels
+
+| Chess Engine | Compiler | Core Insight |
+|--------------|----------|--------------|
+| Must follow chess rules | Must preserve semantics (invariants) | Non-negotiable constraints |
+| Perft testing | Invariant checking | Checksums for correctness |
+| Evaluation complexity | Optimization passes | Quality vs. cost tradeoff |
+| Search depth | Compile time | How much analysis to do |
+| Board representation | IR design | Internal form optimized for analysis |
+| Move generation | IR generation | Convert position to analyzable form |
+| Opening book + search | JIT tiered compilation | Fast first, optimize hot paths |
+| Simple eval + deep search vs. complex eval + shallow | -O0 vs -O3 | Same tradeoff pattern |
+
+### Advent of Code ↔ Compiler Optimization
+
+| AoC Lesson | Compiler Application |
+|------------|---------------------|
+| Measure, don't guess | Profile before optimizing |
+| Simple often beats complex | Linear scan register allocation in production JITs |
+| Big changes ≠ big improvements | Diminishing returns at higher -O levels |
+| Profile first | Data flow analysis finds actual bottlenecks |
+| Better data structure > clever algorithm | Right IR enables optimization |
+
+**When explaining concepts:** Default to chess/AoC analogies when possible. They make abstract concepts concrete and leverage existing mental models.
 
 ## Recommended Progression
 
@@ -127,7 +182,51 @@ When helping with this repository:
 - Topics revisited multiple times
 - Earlier notes may be contradicted (and resolved) by later ones
 - Links accumulate faster than pages
-- Implementation examples use pseudocode or are described conceptually (no specific language)
+- Implementation examples will be actual code (Week 3+), not pseudocode
+- Training materials are comprehensive; daily notes synthesize
+- Repetition with variation is intentional and valuable
+
+## Content Creation Guidelines
+ (but will include actual implementation code)
+- Not a linear textbook
+- Not focused on instant gratification
+- Not fill-in-the-blank exercises (passive reading, active questioning)
+
+## Key Session Insights
+
+Patterns that have proven effective:
+
+1. **Multiple representations aren't redundant** - Each IR (AST, TAC, CFG, SSA) is optimized for different operations
+2. **Invariants are contracts between phases** - Like perft testing in chess engines, they're checksums for correctness
+3. **Every design choice is a tradeoff** - Context determines the right solution; there is no universally best approach
+4. **Simple can beat complex** - Linear scan in production compilers, constant folding's high impact despite simplicity
+5. **Measure, don't guess** - Profile before optimizing (AoC lesson applies universally)
+6. **Repetition with variation strengthens learning** - Read detailed training doc, then condensed daily note
+7. **Cross-domain analogies make abstract concepts stick** - Chess and AoC provide concrete mental models
+
+## Special Considerations
+
+- **Glossary maintenance:** Keep `00-index/glossary.md` updated with new acronyms and terms
+- **Graph visualization:** User appreciates seeing the knowledge graph grow and densify
+- **Commit messages:** Be descriptive about what was added and why
+- **Week transitions:** Clearly mark when moving from theory to implementation
+- **Testing approach:** Like perft testing - clear invariants to verify correctness
+- Code snippets with concrete illustrations
+- Tables for visual comparison
+- Liberal cross-referencing to related concepts
+
+### For Daily Notes
+- Pre-filled with synthesis (not templates to complete)
+- Reinforce training material with different framing
+- Include insights section (aha moments and connections)
+- Questions raised (encourage deeper exploration)
+- Reflection prompts completed with thoughtful responses
+
+### For Zettel Notes
+- Atomic concepts (one clear idea per zettel)
+- Self-contained (can be read independently)
+- Aggressive linking (connect to all related concepts)
+- Timeless (should age well as understanding deepens)
 
 ## What This Repository Is NOT
 
