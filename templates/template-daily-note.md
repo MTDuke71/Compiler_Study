@@ -1,14 +1,14 @@
 # Daily Note — {{date:MMMM D, YYYY}}
 
 **Day:** {{date:dddd}}  
-**Week:** [[Weekly Notes/{{date:YYYY-[W]WW}}]]  
+**Week:** [Weekly Notes/{{date:YYYY-[W]WW}}]  
 **Compiler Study Day:** XX
 
 ## Today's Focus
 
 ### Primary Topic: [Topic Name]
 
-**Note:** [[path/to/main-note]]
+**Note:** [path/to/main-note]
 
 **Time Budget:** 60 minutes
 
@@ -47,7 +47,7 @@
 
 ## Tomorrow's Preview
 
-**Day XX:** [[path/to/next-day]]  
+**Day XX:** [path/to/next-day]  
 Focus: 
 
 ## Related Notes
