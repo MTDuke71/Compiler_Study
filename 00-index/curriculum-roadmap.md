@@ -167,29 +167,45 @@ See [[Stanford/README]] for detailed lecture breakdown and links to repository c
 ---
 
 ### **Week 5: Stanford Week 3 — Parsing I**
-**Stanford Content:** (Lecture topics TBD - update when available)
+**Stanford Lectures:** 05-01 through 06-05 (10 lectures)
 
-**Expected Core Content:**
-- Context-free grammars
-- Top-down parsing (recursive descent, LL)
-- Bottom-up parsing concepts
-- Parse trees vs. abstract syntax trees
+**Core Content:**
+- Introduction to parsing (5-01)
+- Context-free grammars (5-02)
+- Derivations (5-03)
+- Ambiguity in grammars (5-04)
+- Error handling in parsers (6-01)
+- Abstract syntax trees (6-02)
+- Recursive descent parsing (6-03)
+- Recursive descent algorithm (6-04)
+- Recursive descent limitations (6-04-1)
+- Left recursion problem (6-05)
 
 **Integration with Repository:**
 - Deep dive into [[03-parsing/recursive-descent]]
 - Formal grounding for [[03-parsing/ambiguity]]
 - Connect to [[03-parsing/precedence-and-associativity]]
+- Practical examples for [[03-parsing/trees-vs-structure]]
 
 **Deliverables:**
-- Format Stanford Week 3 lectures
+- Format all 10 Stanford Week 3 lectures
 - Document CFG for Cool
 - Create examples of ambiguous vs. unambiguous grammars
+- Document left recursion elimination techniques
 - Update [[03-parsing/README]] with Stanford insights
+
+**Implementation (if provided):**
+- Implement recursive descent parser for Cool subset
+- Handle error recovery
+- Build AST nodes
 
 **Success Criteria:**
 - Can write CFG for simple languages
-- Understand parsing algorithm tradeoffs
-- Ready for advanced parsing techniques
+- Understand derivations (leftmost, rightmost)
+- Can identify and resolve grammar ambiguity
+- Understand recursive descent algorithm and limitations
+- Know how to eliminate left recursion
+- Ready for advanced parsing techniques (Week 6)
 
 ---
 

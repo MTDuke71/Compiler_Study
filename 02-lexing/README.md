@@ -15,17 +15,15 @@ Lexical analysis is the **first phase of compilation**, transforming a stream of
 
 ---
 
-## 6-Day Lexing Curriculum
+## 5-Day Lexing Curriculum
 
 ### Week Overview
 
-This week covers lexical analysis from theory to implementation. By Saturday, you'll have built a working lexer for a subset of COOL and understand the mathematical foundations (regular languages, finite automata) that make lexing tractable.
+This week covers lexical analysis from theory to implementation. By Friday, you'll have built a working lexer and understand the mathematical foundations (regular languages, finite automata) that make lexing tractable.
 
 **Learning pattern:** 
-- **Days 1-2:** Foundations (what, why, regular languages)
-- **Day 3:** Theory (DFA/NFA, regex to automata)
-- **Days 4-5:** Implementation (hand-written lexer, real code)
-- **Day 6:** Integration and edge cases
+- **Days 1-2:** Foundations and theory (what, why, regular languages, automata)
+- **Days 3-5:** Implementation (hand-written lexer, extension, integration)
 
 ---
 
@@ -57,67 +55,42 @@ This week covers lexical analysis from theory to implementation. By Saturday, yo
 
 ---
 
-### Tuesday: Regular Languages
+### Tuesday: Regular Languages + Finite Automata
 
-**Theme:** The mathematical foundation - why regular expressions work for lexing
+**Theme:** Mathematical foundations - from theory to execution
 
 **Topics:**
 - **Regular languages** - Definition and closure properties
 - **Regular expressions** - Syntax and semantics
 - **Why regular languages?** - Just powerful enough for token recognition
 - **Limitations** - What regular languages cannot express (balanced parentheses, nested structures)
-- **Context-free vs. regular** - Why we need parsing for structure
+- **Deterministic Finite Automata (DFA)** - States, transitions, acceptance
+- **Non-deterministic Finite Automata (NFA)** - Multiple transitions, epsilon moves
+- **Regex → NFA → DFA** - Thompson's construction, subset construction
 
 **Key questions:**
 - Why can't regex handle nested comments?
 - What makes a language "regular"?
-- How do we know our token patterns are regular?
-
-**Deliverables:**
-- Training document: "Regular Languages and Lexing"
-- Daily note: Examples of regular vs. non-regular patterns
-- Zettel: Regular languages, closure properties
-
-**Chess/AoC connection:**
-- Regular patterns in PGN notation (each move follows a pattern)
-- AoC: When line-by-line regex works vs. when you need parsing
-
-**Estimated time:** 3-4 hours (more theoretical, may need re-reading)
-
----
-
-### Wednesday: Finite Automata - The Lexer's Engine
-
-**Theme:** From regular expressions to executable code
-
-**Topics:**
-- **Deterministic Finite Automata (DFA)** - States, transitions, acceptance
-- **Non-deterministic Finite Automata (NFA)** - Multiple transitions, epsilon moves
-- **Regex → NFA → DFA** - Thompson's construction, subset construction
-- **DFA minimization** - Hopcroft's algorithm (conceptual, not implementation)
-- **Why DFA for lexers?** - Efficient, predictable, easy to implement
-
-**Key questions:**
 - Why does a DFA run in O(n) time?
-- What's the cost of converting NFA → DFA? (exponential in worst case, polynomial in practice)
-- How does lexer performance relate to DFA size?
+- What's the cost of converting NFA → DFA?
 
 **Deliverables:**
-- Training document: "Finite Automata for Lexical Analysis"
-- Daily note: Trace DFA execution on example inputs
-- Zettel: DFA, NFA, Thompson's construction
+- Training document: "Regular Languages and Finite Automata"
+- Daily note: Examples of regular vs. non-regular patterns, DFA traces
+- Zettel: Regular languages, DFA/NFA, Thompson's construction
 
 **Chess/AoC connection:**
+- Regular patterns in PGN notation
 - DFA state machine like chess engine state (position → legal moves → next position)
 - AoC state machines (2D grid navigation, game of life patterns)
 
-**Estimated time:** 3-4 hours (diagrams help, draw state machines)
+**Estimated time:** 4-5 hours (combines theory from old Tuesday + Wednesday)
 
 ---
 
-### Thursday: Hand-Written Lexer (Part 1)
+### Wednesday: Hand-Written Lexer Implementation
 
-**Theme:** **Read → Run** - Understanding lexer implementation
+**Theme:** **Read → Run → Modify** - Complete lexer from scratch to extension
 
 **Topics:**
 - **Lexer structure** - Main loop, character lookahead, token emission
@@ -125,72 +98,82 @@ This week covers lexical analysis from theory to implementation. By Saturday, yo
 - **Keyword vs. identifier** - Reserved word tables
 - **Whitespace and comments** - Skip vs. preserve (for formatting tools)
 - **Error handling** - Invalid characters, unclosed strings
+- **Adding token types** - Strings, floats, comments
+- **Maximal munch** - Longest match principle (>= vs. >, =)
 
 **Implementation:**
 - **Provided:** Complete hand-written lexer for simple language (variables, numbers, operators, keywords)
 - **Activity:** Read code, run on test inputs, observe token streams
 - **Trace execution:** Step through identifier recognition, number parsing
+- **Extend:** Add string literals, multi-line comments, floating-point numbers
 
 **Key questions:**
 - How does lookahead work? (peek without consuming)
 - When does lexer backtrack vs. commit?
 - How are line/column positions maintained?
+- How do you handle escape sequences in strings?
+- What happens with unclosed comments?
 
 **Deliverables:**
-- Training document: "Hand-Written Lexer Walkthrough"
-- Annotated source code with comments explaining each section
-- Daily note: Key insights from reading implementation
+- Training document: "Hand-Written Lexer Implementation"
+- Annotated source code with comments
+- Extended lexer with new features
+- Daily note: Key insights from implementation
 - Test inputs and their token streams
 
 **Chess/AoC connection:**
-- Lexer lookahead like chess engine move generation (peek ahead before committing)
+- Lexer lookahead like chess engine move generation
+- Extending lexer like adding move types (castling, en passant)
 - Maintaining position like tracking state in AoC simulations
 
-**Estimated time:** 3-4 hours (code reading, running, tracing)
+**Estimated time:** 5-6 hours (combines old Thursday + Friday)
 
 ---
 
-### Friday: Hand-Written Lexer (Part 2)
+### Thursday: Testing, Performance & Edge Cases
 
-**Theme:** **Modify → Understand** - Extending the lexer
+**Theme:** Making the lexer robust and production-ready
 
 **Topics:**
-- **Adding new token types** - Strings, floats, comments
-- **Maximal munch** - Longest match principle (>= vs. >, =)
-- **Operator precedence** - Not lexer's job, but must recognize all operators
-- **Performance considerations** - Switch vs. if-else, table-driven approaches
+- **Comprehensive testing** - Valid inputs, edge cases, malformed inputs
+- **Error recovery** - How to handle invalid tokens gracefully
+- **Performance measurement** - Profiling lexer on large inputs
+- **Edge cases** - Unicode, very long identifiers, number overflow
+- **Failure modes** - What can go wrong and how to detect it
 
 **Implementation:**
-- **Modify:** Extend Thursday's lexer with:
-  - String literals (with escape sequences)
-  - Multi-line comments
-  - Floating-point numbers
-  - Additional operators (++, --, <<, >>)
-- **Test:** Create comprehensive test suite
-- **Break it:** Try malformed inputs, observe error messages
+- **Test suite:** Create comprehensive tests covering:
+  - All token types
+  - Boundary cases (empty input, single character, very long)
+  - Malformed input (unclosed strings, invalid escapes, bad numbers)
+  - Position tracking (multi-line, tabs, mixed whitespace)
+- **Performance:** Measure lexer speed on various input sizes
+- **Error messages:** Ensure clear, helpful error reporting
 
 **Key questions:**
-- How do you handle escape sequences in strings?
-- What happens with unclosed comments?
-- How does maximal munch resolve ambiguity?
+- How do you know your lexer is correct?
+- What makes a good error message?
+- When is performance good enough?
+- What edge cases did you miss initially?
 
 **Deliverables:**
-- Extended lexer implementation with new features
-- Comprehensive test suite
-- Daily note: Challenges encountered, solutions applied
-- Error handling examples
+- Comprehensive test suite with coverage analysis
+- Performance measurements and profiling results
+- Daily note: Edge cases discovered, lessons learned
+- Documentation of error handling strategy
 
 **Chess/AoC connection:**
-- Extending lexer like adding move types to chess engine (castling, en passant)
-- Test suite creation like AoC example validation
+- Testing like perft validation (exhaustive correctness checking)
+- Performance measurement like AoC optimization (measure, don't guess)
+- Edge cases like chess special moves (often forgotten, always tested)
 
-**Estimated time:** 4-5 hours (implementation, debugging, testing)
+**Estimated time:** 4-5 hours (testing, debugging, documentation)
 
 ---
 
-### Saturday: Lexer Generator Tools & Integration
+### Friday: Lexer Generators & Real-World Integration
 
-**Theme:** Real-world lexing - tools, performance, integration with parser
+**Theme:** Tools, tradeoffs, and integration with the rest of the compiler
 
 **Topics:**
 - **Lex/Flex** - Declarative lexer specification
@@ -199,46 +182,51 @@ This week covers lexical analysis from theory to implementation. By Saturday, yo
   - Generated: Fast development, provably correct
   - Hand-written: Better error messages, special-case optimization
 - **Lexer-parser interface** - Token stream protocol
-- **Lookahead and backtracking** - When lexer needs parser context
-- **Real-world issues** - Unicode, encodings, performance
+- **Real-world issues** - Unicode, encodings, performance in production
+- **Week synthesis** - From theory to working code
 
 **Implementation:**
 - **Compare:** Hand-written lexer vs. Flex-generated lexer
-- **Measure:** Performance on large inputs
+- **Measure:** Performance differences on large inputs
 - **Integrate:** Connect lexer output to dummy parser (prints token stream)
+- **Document:** Decision framework for tool selection
 
 **Key questions:**
 - When should you hand-write vs. generate?
-- How does lexer performance impact overall compile time? (Usually negligible)
+- How does lexer performance impact overall compile time?
 - What happens when lexical rules are ambiguous?
+- What did you learn this week that surprised you?
 
 **Deliverables:**
 - Training document: "Lexer Generators and Practical Considerations"
 - Performance comparison (hand-written vs. generated)
 - Daily note: Week synthesis, key insights, open questions
 - Updated knowledge graph showing lexing connections
+- Integration example with parser interface
 
 **Chess/AoC connection:**
 - Tool selection like choosing perft implementation (speed vs. clarity)
-- Performance measurement like AoC optimization (measure before optimizing)
+- Performance measurement like AoC optimization (profile first!)
+- Integration testing like connecting chess engine components
 
-**Estimated time:** 3-4 hours (tool exploration, comparison, synthesis)
+**Estimated time:** 4-5 hours (tool exploration, comparison, synthesis)
 
 ---
 
 ## Week Deliverables
 
-By end of Saturday, you should have:
+By end of Friday, you should have:
 
 ### Code
 - ✅ Working hand-written lexer (extensible, well-tested)
 - ✅ Flex-based lexer (for comparison)
-- ✅ Comprehensive test suite
+- ✅ Comprehensive test suite with edge cases
 - ✅ Integration with token stream consumer
+- ✅ Performance measurements
 
 ### Documentation
-- ✅ 6 training documents (one per day)
-- ✅ 6 daily notes (synthesis, reflections)
+- ✅ 5 training documents (one per day)
+- ✅ 5 daily notes (synthesis, reflections)
 - ✅ Multiple zettels (regular languages, DFA/NFA, lexer structure, etc.)
 - ✅ Updated knowledge graph
 
@@ -299,8 +287,8 @@ By end of Saturday, you should have:
 - Flex/Lex documentation
 - Regex tutorial/reference
 
-### Stanford Lectures (Sunday)
-- Lecture on lexical analysis (watch Sunday to reinforce week's learning)
+### Stanford Lectures (Weekend)
+- Week 3 Stanford lectures (Saturday-Sunday to reinforce and extend week's learning)
 
 ---
 
@@ -333,9 +321,9 @@ By end of Saturday, you should have:
 
 ## Notes
 
-- **Flexible pacing:** Some days may take longer (especially Wednesday/Thursday). That's fine—understanding matters more than schedule.
-- **Sunday Stanford lecture:** Will provide another perspective on same material (repetition with variation).
-- **Questions encouraged:** Note anything unclear for Monday discussion.
+- **Flexible pacing:** Some days may take longer (especially Tuesday/Wednesday). That's fine—understanding matters more than schedule.
+- **Weekend Stanford lectures:** Will provide another perspective on same material (repetition with variation).
+- **Questions encouraged:** Note anything unclear for discussion.
 - **Implementation language:** Choose what you're comfortable with (Python for clarity, C/Rust for performance, whatever fits your learning style).
 
 **Remember:** Lexing is the most straightforward compiler phase. If you understand this deeply, harder phases will feel more approachable.
