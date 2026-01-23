@@ -1,0 +1,128 @@
+[
+  {
+    "type": "IF",
+    "lexeme": "if",
+    "value": null,
+    "line": 1,
+    "column": 1
+  },
+  {
+    "type": "IDENTIFIER",
+    "lexeme": "x",
+    "value": null,
+    "line": 1,
+    "column": 4
+  },
+  {
+    "type": "EQUAL_EQUAL",
+    "lexeme": "==",
+    "value": null,
+    "line": 1,
+    "column": 6
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "42",
+    "value": 42,
+    "line": 1,
+    "column": 9
+  },
+  {
+    "type": "PLUS",
+    "lexeme": "+",
+    "value": null,
+    "line": 1,
+    "column": 12
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "7",
+    "value": 7,
+    "line": 1,
+    "column": 14
+  },
+  {
+    "type": "WHILE",
+    "lexeme": "while",
+    "value": null,
+    "line": 2,
+    "column": 1
+  },
+  {
+    "type": "IDENTIFIER",
+    "lexeme": "y",
+    "value": null,
+    "line": 2,
+    "column": 7
+  },
+  {
+    "type": "EQUAL",
+    "lexeme": "=",
+    "value": null,
+    "line": 2,
+    "column": 9
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "10",
+    "value": 10,
+    "line": 2,
+    "column": 11
+  },
+  {
+    "type": "MINUS",
+    "lexeme": "-",
+    "value": null,
+    "line": 2,
+    "column": 14
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "3",
+    "value": 3,
+    "line": 2,
+    "column": 16
+  },
+  {
+    "type": "IDENTIFIER",
+    "lexeme": "foo",
+    "value": null,
+    "line": 3,
+    "column": 1
+  },
+  {
+    "type": "EQUAL",
+    "lexeme": "=",
+    "value": null,
+    "line": 3,
+    "column": 5
+  },
+  {
+    "type": "IDENTIFIER",
+    "lexeme": "bar",
+    "value": null,
+    "line": 3,
+    "column": 7
+  },
+  {
+    "type": "STAR",
+    "lexeme": "*",
+    "value": null,
+    "line": 3,
+    "column": 11
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "2",
+    "value": 2,
+    "line": 3,
+    "column": 13
+  },
+  {
+    "type": "EOF",
+    "lexeme": "",
+    "value": null,
+    "line": 4,
+    "column": 1
+  }
+]
