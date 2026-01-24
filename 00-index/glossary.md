@@ -87,6 +87,27 @@ An IR format where:
 
 ---
 
+## Formal Language Concepts
+
+### Chomsky Hierarchy
+A classification of formal grammars ordered by expressive power:
+
+**Type 3 (Regular):** Recognized by finite automata; no memory; used for lexical analysis (tokens, identifiers)
+
+**Type 2 (Context-Free):** Recognized by pushdown automata; one stack; used for parsing (nested structures, expressions)
+
+**Type 1 (Context-Sensitive):** Recognized by linear-bounded automata; context-dependent rules; used for semantic constraints
+
+**Type 0 (Unrestricted):** Recognized by Turing machines; parsing is undecidable; impractical for compilers
+
+**Key insight:** Each compiler phase uses exactly the minimum level needed—lexing uses Type 3, parsing uses Type 2, semantics needs Type 1.
+
+**Fundamental limitation:** Finite automata (Type 3) cannot recognize balanced parentheses (need arbitrary counting). This is mathematical, not a limitation of implementation.
+
+See detailed analysis: [[zettel/Z0007-chomsky-hierarchy]]
+
+---
+
 ## Parsing Algorithms
 
 ### LL — Left-to-right, Leftmost derivation
