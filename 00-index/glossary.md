@@ -107,6 +107,16 @@ An IR format where:
 - Used by tools like Yacc/Bison
 - Good balance of power and efficiency
 
+### PEG — Parsing Expression Grammar
+- Alternative to context-free grammars
+- Ordered choice (first match wins, no ambiguity)
+- Unlimited lookahead with backtracking
+- Can recognize some non-context-free languages
+- Packrat parsing provides linear time guarantee
+- Sometimes combines lexing and parsing (scanner-less)
+- Examples: PEG.js, Pest, Python's new parser
+- See: [[03-parsing/README]]
+
 ### SLR — Simple LR
 - Simplified LR parsing
 - Less powerful than LALR

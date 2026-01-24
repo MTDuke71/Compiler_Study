@@ -2,7 +2,7 @@
 
 ## Links
 - Up: [[README]]
-- Related: [[02-lexing/hand-written-lexer]] [[02-lexing/regular-languages]]
+- Related: [[02-lexing/hand-written-lexer]] [[02-lexing/regular-languages]] [[02-lexing/lexer-generators]]
 - Down: [[02-lexing/regular-languages]]
 
 ---
@@ -280,6 +280,7 @@ By end of Friday, you should have:
 - [[02-lexing/regular-languages]]
 - [[02-lexing/hand-written-lexer]]
 - [[02-lexing/failure-modes]]
+- [[02-lexing/lexer-generators]]
 
 ### External (Optional)
 - Dragon Book: Chapter 3 (Lexical Analysis)
