@@ -209,131 +209,211 @@ See [[Stanford/README]] for detailed lecture breakdown and links to repository c
 
 ---
 
-### **Week 6: Stanford Week 4 — Parsing II**
-**Stanford Content:** (Lecture topics TBD)
+### **Week 6: Stanford Week 4 — Parsing II (Bottom-Up Parsing)**
+**Stanford Lectures:** 07-01 through 08-08 (14 lectures)
 
-**Expected Core Content:**
-- Advanced parsing techniques
-- Error recovery
-- Parser generators
-- Cool parser implementation
+**Core Content:**
+- Predictive parsing and LL(1) theory (7-01)
+- First sets computation (7-02)
+- Follow sets computation (7-03)
+- LL(1) parsing tables (7-04)
+- Bottom-up parsing introduction (7-05)
+- Shift-reduce parsing (7-06)
+- Handles and handle recognition (8-01, 8-02)
+- Recognizing viable prefixes (8-03)
+- Valid items (8-04)
+- SLR parsing algorithm (8-05)
+- SLR parsing examples (8-06, 8-08)
+- SLR improvements (8-07)
 
 **Integration with Repository:**
+- Complements [[03-parsing/recursive-descent]] with bottom-up approach
+- Formal theory for parser construction
 - Advanced topics for [[03-parsing/README]]
-- Practical examples for parser construction
+- Comparison of top-down vs. bottom-up strategies
 
 **Deliverables:**
-- Format Stanford Week 4 lectures
-- Document parser error recovery strategies
+- Format all 14 Stanford Week 4 lectures
+- Document First/Follow set computation algorithms
+- Create LL(1) parsing table examples
+- Document SLR parsing algorithm with examples
+- Trace shift-reduce parsing on example inputs
+- Update [[03-parsing/README]] with bottom-up insights
 - Implementation if Stanford provides assignment
 
 **Success Criteria:**
+- Can compute First and Follow sets
+- Understand LL(1) parsing table construction
+- Can trace shift-reduce parsing
+- Understand handle recognition
+- Know difference between LL and LR parsing
 - Can build parser for Cool (or subset)
-- Understand production parser techniques
 - Ready for semantic analysis
 
 ---
 
 ### **Week 7: Stanford Week 5 — Semantic Analysis**
-**Stanford Content:** (Lecture topics TBD)
+**Stanford Lectures:** 09-01 through 09-09 (9 lectures)
 
-**Expected Core Content:**
-- Type systems and type checking
-- Symbol tables and scoping
-- Semantic rules for Cool
-- Type inference (possibly)
+**Core Content:**
+- Introduction to semantic analysis (9-01)
+- Scope and scoping rules (9-02)
+- Symbol tables and implementation (9-03)
+- Type systems fundamentals (9-04)
+- Type checking mechanisms (9-05)
+- Type environments (9-06)
+- Subtyping and inheritance (9-07)
+- Typing methods and self-type (9-08)
+- Implementing type checking for Cool (9-09)
 
 **Integration with Repository:**
 - Complements [[04-semantics/types-as-constraints]]
 - Concrete examples for [[04-semantics/scope]]
 - Implementation of [[04-semantics/symbol-tables]]
+- Practical type checking algorithms
 
 **Deliverables:**
-- Format Stanford Week 5 lectures
-- Document Cool's type system
-- Build symbol table if assigned
-- Connect to [[04-semantics/README]]
+- Format all 9 Stanford Week 5 lectures
+- Document Cool's type system and scoping rules
+- Implement symbol table with nested scopes
+- Implement type checker for Cool subset
+- Document subtyping relationships
+- Handle SELF_TYPE and method typing
+- Update [[04-semantics/README]] with Stanford insights
 
 **Success Criteria:**
-- Can implement type checker
-- Understand scoping rules deeply
-- Ready for IR generation
+- Can implement type checker with inheritance
+- Understand scoping rules and symbol table management
+- Know how to handle subtyping and SELF_TYPE
+- Can check method signatures and types
+- Ready for runtime organization and IR generation
 
 ---
 
-### **Week 8: Stanford Week 6 — Runtime & IR**
-**Stanford Content:** (Lecture topics TBD)
+### **Week 8: Stanford Week 6 — Cool Type Checking & Runtime Organization**
+**Stanford Lectures:** 10-01 through 11-06 (12 lectures)
 
-**Expected Core Content:**
-- Runtime organization
-- Activation records
-- IR generation
-- Cool runtime model
+**Core Content:**
+- Static vs. dynamic typing (10-01)
+- SELF_TYPE fundamentals (10-02)
+- SELF_TYPE operations and semantics (10-03)
+- SELF_TYPE usage patterns (10-04)
+- SELF_TYPE checking implementation (10-05)
+- Error recovery strategies (10-06)
+- Runtime organization overview (11-01)
+- Activation records and stack frames (11-02, 11-03)
+- Globals and heap management (11-04)
+- Memory alignment (11-05)
+- Stack machine architecture (11-06)
 
 **Integration with Repository:**
 - Bridges [[04-semantics/README]] to [[05-ir/README]]
 - Concrete runtime for [[07-codegen/calling-conventions]]
-- Stack layout examples
+- Stack machine details for [[07-codegen/stack-machines]]
+- Memory layout examples
 
 **Deliverables:**
-- Format Stanford Week 6 lectures
-- Document Cool runtime organization
-- Draw stack layouts for Cool functions
+- Format all 12 Stanford Week 6 lectures
+- Document SELF_TYPE checking thoroughly
+- Document Cool runtime organization and memory model
+- Draw activation record layouts
+- Understand stack vs. heap allocation
+- Document alignment requirements
+- Analyze stack machine architecture
 - Update [[05-ir/README]] and [[07-codegen/README]]
 
 **Success Criteria:**
-- Understand memory layout
-- Can generate IR from AST
-- Ready for optimization
+- Can implement SELF_TYPE checking correctly
+- Understand activation records and calling conventions
+- Know memory layout (stack, heap, globals)
+- Understand alignment and its importance
+- Can design stack machine instruction set
+- Ready for code generation and optimization
 
 ---
 
-### **Week 9: Stanford Week 7 — Optimization I**
-**Stanford Content:** (Lecture topics TBD)
+### **Week 9: Stanford Week 7 — Code Generation & Operational Semantics**
+**Stanford Lectures:** 12-01 through 13-04 (10 lectures)
 
-**Expected Core Content:**
-- Local optimizations
-- Data flow analysis
-- Control flow graphs
-- Basic optimization techniques
+**Core Content:**
+- Introduction to code generation (12-01)
+- Code generation fundamentals (12-02, 12-03)
+- Code generation example walkthrough (12-04)
+- Temporaries and register management (12-05)
+- Object layout in memory (12-06)
+- Semantics overview (13-01)
+- Operational semantics framework (13-02)
+- Cool operational semantics part I (13-03)
+- Cool operational semantics part II (13-04)
+
+**Integration with Repository:**
+- Implementation of [[07-codegen/instruction-selection]]
+- Concrete examples for [[07-codegen/registers-are-scarce]]
+- Object layout for [[07-codegen/stack-machines]]
+- Operational semantics formalism
+- Complete [[07-codegen/README]]
+
+**Deliverables:**
+- Format all 10 Stanford Week 7 lectures
+- Document code generation algorithms for Cool
+- Understand temporary allocation strategies
+- Document object layout and memory representation
+- Learn operational semantics notation and rules
+- Formalize Cool semantics using operational approach
+- Implement code generator for Cool subset
+- Update [[07-codegen/README]] with Stanford insights
+
+**Success Criteria:**
+- Can generate code for Cool expressions and statements
+- Understand temporary management and register usage
+- Know object memory layout and vtables
+- Can read and write operational semantics rules
+- Understand formal semantics of Cool
+- Ready for optimization techniques
+
+---
+
+### **Week 10: Stanford Week 8 — Local Optimization & Global Optimization**
+**Stanford Lectures:** 14-01 through 15-05 (9 lectures)
+
+**Core Content:**
+- Intermediate code representation (14-01)
+- Optimization overview and framework (14-02)
+- Local optimization techniques (14-03)
+- Peephole optimization (14-04)
+- Dataflow analysis foundations (15-01)
+- Constant propagation (15-02)
+- Analysis of loops (15-03)
+- Orderings and lattices (15-04)
+- Liveness analysis (15-05)
 
 **Integration with Repository:**
 - Expands [[06-optimization/constant-folding]]
 - Formal treatment of [[06-optimization/data-flow]]
 - Examples for [[05-ir/cfg]]
+- Local vs. global [[06-optimization/local-vs-global]]
+- Dead code elimination [[06-optimization/dead-code]]
 
 **Deliverables:**
-- Format Stanford Week 7 lectures
-- Document data flow analysis algorithms
-- Implement optimizations if assigned
-- Update [[06-optimization/README]]
+- Format all 9 Stanford Week 8 lectures
+- Document intermediate code forms used by Cool
+- Understand local optimization patterns
+- Implement peephole optimizer
+- Document dataflow analysis framework thoroughly
+- Implement constant propagation algorithm
+- Analyze loops for optimization opportunities
+- Understand lattice theory for dataflow
+- Implement liveness analysis
+- Update [[06-optimization/README]] with Stanford insights
 
 **Success Criteria:**
-- Can perform reaching definitions analysis
-- Understand optimization safety
-- Ready for advanced optimizations
-
----
-
-### **Week 10: Stanford Week 8 — Optimization II**
-**Stanford Content:** (Lecture topics TBD)
-
-**Expected Core Content:**
-- Global optimizations
-- SSA form
-- Loop optimizations
-- Advanced data flow
-
-**Integration with Repository:**
-- Deep dive into [[05-ir/ssa-intuition]]
-- Advanced topics for [[06-optimization/README]]
-- Global vs. local [[06-optimization/local-vs-global]]
-
-**Deliverables:**
-- Format Stanford Week 8 lectures
-- Document SSA construction
-- Understand phi nodes deeply
-- Create advanced optimization zettels
+- Can perform local optimizations (basic blocks)
+- Understand peephole optimization patterns
+- Can implement dataflow analysis algorithms
+- Understand constant propagation and folding
+- Can compute liveness information
+- Know difference between forward and backward analysis
+- Ready for register allocation and advanced topics
 
 **Success Criteria:**
 - Can convert to SSA form
@@ -342,17 +422,45 @@ See [[Stanford/README]] for detailed lecture breakdown and links to repository c
 
 ---
 
-### **Week 11: Stanford Week 9 — Code Generation**
-**Stanford Content:** (Lecture topics TBD)
+### **Week 11: Stanford Week 9 — Register Allocation & Garbage Collection**
+**Stanford Lectures:** 16-01 through 17-05 (9 lectures)
 
-**Expected Core Content:**
-- Instruction selection
-- Register allocation
-- Code generation for Cool
-- Target architecture specifics
+**Core Content:**
+- Register allocation fundamentals (16-01)
+- Graph coloring algorithm (16-02)
+- Spilling and register pressure (16-03)
+- Managing caches (16-04)
+- Automatic memory management overview (17-01)
+- Mark and sweep garbage collection (17-02)
+- Stop and copy garbage collection (17-03)
+- Conservative garbage collection (17-04)
+- Reference counting (17-05)
 
 **Integration with Repository:**
-- Implementation of [[07-codegen/instruction-selection]]
+- Implementation of [[07-codegen/registers-are-scarce]]
+- Graph coloring for register allocation
+- Memory management strategies
+- Advanced runtime topics
+
+**Deliverables:**
+- Format all 9 Stanford Week 9 lectures
+- Document register allocation algorithm
+- Implement graph coloring for register allocation
+- Understand spilling strategies and when to spill
+- Document cache management techniques
+- Understand garbage collection algorithms (mark-sweep, stop-copy, conservative, reference counting)
+- Compare GC strategies (throughput vs. pause time)
+- Analyze tradeoffs between different GC approaches
+- Update [[07-codegen/README]] with register allocation insights
+
+**Success Criteria:**
+- Can implement graph coloring register allocator
+- Understand when and how to spill registers
+- Know cache management strategies
+- Understand all major GC algorithms
+- Can compare GC tradeoffs (conservative vs. precise, stop-the-world vs. incremental)
+- Can implement basic mark-sweep or reference counting
+- Ready for advanced compiler topics and course completion
 - Concrete examples for [[07-codegen/registers-are-scarce]]
 - Complete [[07-codegen/README]]
 
@@ -369,30 +477,44 @@ See [[Stanford/README]] for detailed lecture breakdown and links to repository c
 
 ---
 
-### **Week 12: Stanford Week 10 — Advanced Topics**
-**Stanford Content:** (Lecture topics TBD)
+### **Week 12: Stanford Week 10 — Java**
+**Stanford Lectures:** 18-01 through 18-07 (7 lectures)
 
-**Expected Core Content:**
-- Garbage collection (likely)
-- Advanced features
-- Real-world compiler techniques
-- Cool complete compiler
+**Core Content:**
+- Java language overview and history (18-01)
+- Java arrays and memory model (18-02)
+- Java exceptions and exception handling (18-03)
+- Java interfaces and abstraction (18-04)
+- Java coercions and type conversions (18-05)
+- Java threads and concurrency (18-06)
+- Other Java topics and advanced features (18-07)
 
 **Integration with Repository:**
-- Advanced topics beyond seven phases
-- Modern compiler techniques
-- Complete picture
+- Real-world language design case study
+- Comparison with Cool language design
+- Advanced type system features
+- Concurrency and runtime considerations
+- Language feature tradeoffs
 
 **Deliverables:**
-- Format Stanford Week 10 lectures
-- Complete any final Stanford assignments
-- Full Cool compiler if provided
-- Comprehensive review of all phases
+- Format all 7 Stanford Week 10 lectures
+- Document Java's type system and compare to Cool
+- Understand Java's exception handling mechanism
+- Analyze interface-based abstraction vs. inheritance
+- Document Java's memory model and array representation
+- Understand thread model and concurrency primitives
+- Compare language design decisions (Java vs. Cool)
+- Reflect on compiler implications of Java features
+- Complete comprehensive review of all Stanford content
 
 **Success Criteria:**
-- Completed all Stanford content before access expires
-- Have working Cool compiler (or substantial portions)
-- Deep understanding of all compiler phases
+- Understand Java as a real-world language design case study
+- Can compare and contrast Java and Cool design decisions
+- Understand exception handling implementation challenges
+- Know how interfaces affect type checking and code generation
+- Completed all Stanford content before access expires (March 25, 2026)
+- Have deep understanding of all compiler phases through Cool
+- Can articulate tradeoffs in language design
 - Ready to build independent compiler
 
 ---
@@ -726,7 +848,7 @@ Choose between two well-designed pedagogical languages:
 ### **Week 24+: Polish and Extension**
 **Theme:** Refinement and exploration
 
-**Activities:**
+**Core Activities:**
 - Fix bugs discovered in testing
 - Improve error messages
 - Add extensions or optimizations:
@@ -737,17 +859,73 @@ Choose between two well-designed pedagogical languages:
 - Compare to Cool compiler
 - Document design decisions
 
+**Extension: Native Assembly Backend**
+
+After completing the stack machine/VM backend, extend to native assembly:
+
+**Phase 1: x86-64 Backend**
+- **Why first:** Native execution on your Windows machine, no emulation needed
+- **Target:** x86-64 assembly (System V ABI for Linux, Microsoft x64 for Windows)
+- **Toolchain:** GCC/Clang for assembly and linking
+- **Register allocation:** Apply graph coloring from Stanford Week 9
+- **Calling convention:** Implement stack frames with rbp/rsp
+- **Debugging:** Use GDB or LLDB to step through generated assembly
+- **Comparison point:** CISC architecture - variable-length instructions, many addressing modes
+
+**Phase 2: ARM Backend (RISC comparison)**
+- **Why:** Cleaner RISC architecture, better for understanding compiler design
+- **Target:** ARMv8/AArch64 (64-bit ARM)
+- **Emulation:** QEMU user-mode (`qemu-aarch64`) - runs ARM binaries on x86
+  ```bash
+  # Compile for ARM
+  aarch64-linux-gnu-as -o program.o program.s
+  aarch64-linux-gnu-ld -o program program.o
+  
+  # Run with QEMU
+  qemu-aarch64 ./program
+  ```
+- **Toolchain:** `aarch64-linux-gnu-gcc` cross-compiler (available on Windows/Linux)
+- **Architecture benefits:**
+  - Fixed-length instructions (4 bytes each)
+  - Regular encoding (easier instruction selection)
+  - More registers (31 general-purpose vs x86's 16)
+  - Load/store architecture (operations only on registers)
+  - Cleaner than 6502 but same RISC philosophy
+- **Comparison:** Document how register allocation differs with 31 registers vs 16
+
+**Implementation Strategy:**
+1. **Instruction selection:** Create pattern matching for IR → assembly
+2. **Register allocation:** Use graph coloring with actual register constraints
+3. **Code emission:** Generate `.s` assembly files
+4. **Linking:** Use system linker to create executables
+5. **Testing:** Compare output with VM version for correctness
+
+**Connection to 6502 Experience:**
+- ARM is 6502's spiritual successor (both RISC, load/store architectures)
+- x86 is the opposite (CISC, complex addressing modes)
+- Understanding both gives you the full spectrum of code generation
+
 **Deliverables:**
-- Complete, polished compiler
-- Comprehensive test suite
-- Documentation comparing Cool → your language
-- Retrospective document
+- Complete, polished compiler with stack machine backend
+- x86-64 assembly backend (native execution)
+- ARM backend (QEMU emulation)
+- Comprehensive test suite for all three targets
+- Documentation comparing:
+  - Stack machine vs register machine code generation
+  - CISC (x86) vs RISC (ARM) instruction selection
+  - Register allocation strategies for different register counts
+  - Cool (Stanford) → your language → native assembly journey
+- Retrospective document on entire learning journey
 
 **Success Criteria:**
+- Compiler can target three backends: stack machine, x86-64, ARM
+- Generated native assembly runs correctly and efficiently
+- Can explain register allocation and instruction selection for both architectures
+- Knowledge graph documents CISC vs RISC tradeoffs
 - Compiler is production-quality for pedagogical use
-- Knowledge graph is complete
 - Can explain every design decision
 - Feel confident building another compiler
+- **Have come full circle:** From disassembling 6502 to generating ARM assembly
 
 ---
 
