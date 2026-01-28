@@ -360,9 +360,64 @@ Input parsing defines data structure - all subsequent processing uses that struc
 
 ---
 
+## Integration Verification
+
+### Week 4 Lexer ↔ Week 5 Parser (2026-01-28)
+
+**Test:** `test_phase_integration.py`
+
+**Status:** ✓ PASSING
+
+**What Was Tested:**
+1. Source code → `lexer_extended.py` (Week 4) → tokens
+2. Tokens → `complete_parser.py` (Week 5) → AST
+3. No adapters, no converters - direct token flow
+
+**Initial Issues Found:**
+- `complete_parser.py` had embedded TokenType enum (violated single source of truth)
+- Token type name mismatches (INT/FLOAT vs NUMBER, EQ vs EQUAL_EQUAL, etc.)
+- Missing lexeme field in parser's tokens
+- Lexer missing keywords: `fn`, `var`, `return`
+- Lexer missing punctuation: `()`, `{}`, `,`
+
+**Fixes Applied:**
+- Removed embedded enum, imported from `token_types.py`
+- Updated all token type names to match unified enum
+- Added lexeme field to all token creations
+- Extended lexer with missing keywords and punctuation
+- Fixed EQUAL → ASSIGN, BANG_EQUAL → NOT_EQUAL
+
+**Result:**
+```
+[SUCCESS] Phases are compatible!
+
+Abstract Syntax Tree:
+======================================================================
+Program
+  FunctionDecl: add
+    Parameters: ['x', 'y']
+    Body:
+      Block
+        ReturnStatement
+          BinaryOp: PLUS
+```
+
+**Lesson Learned:**
+Integration tests catch violations early. Writing test_phase_integration.py immediately revealed that parser wasn't following the contract. Fixing violations was systematic:
+1. Identify violation (embedded types)
+2. Remove violation (import unified)
+3. Update references (rename tokens)
+4. Verify (run tests)
+
+This demonstrates the power of **explicit contracts** - INTERFACES.md made it clear what was wrong and how to fix it.
+
+---
+
 ## Related Documentation
 
 - [[token_types.py]] - Token format implementation
 - [[TOKEN-UNIFICATION.md]] - History of unification work
 - [[Daily Notes/2026-01-27]] - Token unification lessons
+- [[Daily Notes/2026-01-28]] - Parser integration verification
+- [[test_phase_integration.py]] - Cross-phase compatibility test
 - [[00-index/invariants]] - Core compiler invariants
