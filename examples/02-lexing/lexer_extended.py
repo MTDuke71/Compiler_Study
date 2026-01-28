@@ -14,52 +14,16 @@ This demonstrates:
 - Error recovery (unterminated strings/comments)
 - Escape sequence processing
 - Multiple token types requiring similar patterns
+
+UPDATED: Now uses unified token_types module for cross-phase compatibility!
 """
 
-from enum import Enum, auto
-from dataclasses import dataclass
+import sys
+import os
+# Add parent directory to path to import unified token_types
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-
-class TokenType(Enum):
-    # Literals
-    NUMBER = auto()
-    FLOAT = auto()
-    STRING = auto()
-    IDENTIFIER = auto()
-    
-    # Operators
-    PLUS = auto()
-    MINUS = auto()
-    STAR = auto()
-    SLASH = auto()
-    EQUAL = auto()
-    EQUAL_EQUAL = auto()
-    BANG_EQUAL = auto()
-    LESS = auto()
-    LESS_EQUAL = auto()
-    GREATER = auto()
-    GREATER_EQUAL = auto()
-    
-    # Punctuation
-    SEMICOLON = auto()
-    
-    # Keywords
-    IF = auto()
-    ELSE = auto()
-    WHILE = auto()
-    
-    # Special
-    EOF = auto()
-    ERROR = auto()
-
-
-@dataclass
-class Token:
-    type: TokenType
-    lexeme: str
-    line: int
-    column: int
-    value: any = None
+from token_types import Token, TokenType
 
 
 class Lexer:
@@ -71,6 +35,7 @@ class Lexer:
         self.token_start_pos = 0
         self.token_start_line = 1
         self.token_start_column = 1
+        self.eof_returned = False  # Track if we've already returned EOF
         
     def current_char(self) -> str:
         """Get current character without advancing."""
@@ -137,10 +102,10 @@ class Lexer:
         lexeme = self.source[self.token_start_pos:self.position]
         return Token(
             type=type,
+            value=value,
             lexeme=lexeme,
             line=self.token_start_line,
-            column=self.token_start_column,
-            value=value
+            column=self.token_start_column
         )
     
     def scan_string(self) -> Token:
@@ -244,6 +209,9 @@ class Lexer:
             'if': TokenType.IF,
             'else': TokenType.ELSE,
             'while': TokenType.WHILE,
+            'fn': TokenType.FUNCTION,
+            'var': TokenType.VAR,
+            'return': TokenType.RETURN,
         }
         
         type = keywords.get(lexeme, TokenType.IDENTIFIER)
@@ -251,10 +219,15 @@ class Lexer:
     
     def next_token(self) -> Token:
         """Scan and return the next token."""
+        # If we've already returned EOF, keep returning it
+        if self.eof_returned:
+            return Token(TokenType.EOF, None, '', self.line, self.column)
+        
         self.skip_whitespace()
         
         if self.position >= len(self.source):
-            return Token(TokenType.EOF, '', self.line, self.column)
+            self.eof_returned = True
+            return Token(TokenType.EOF, None, '', self.line, self.column)
         
         self.mark_token_start()
         char = self.advance()
@@ -292,12 +265,12 @@ class Lexer:
                 self.advance()
                 return self.make_token(TokenType.EQUAL_EQUAL)
             else:
-                return self.make_token(TokenType.EQUAL)
+                return self.make_token(TokenType.ASSIGN)
         
         elif char == '!':
             if self.current_char() == '=':
                 self.advance()
-                return self.make_token(TokenType.BANG_EQUAL)
+                return self.make_token(TokenType.NOT_EQUAL)
             else:
                 return self.make_token(TokenType.ERROR)
         
@@ -318,6 +291,18 @@ class Lexer:
         # Semicolon
         elif char == ';':
             return self.make_token(TokenType.SEMICOLON)
+        
+        # Punctuation
+        elif char == '(':
+            return self.make_token(TokenType.LPAREN)
+        elif char == ')':
+            return self.make_token(TokenType.RPAREN)
+        elif char == '{':
+            return self.make_token(TokenType.LBRACE)
+        elif char == '}':
+            return self.make_token(TokenType.RBRACE)
+        elif char == ',':
+            return self.make_token(TokenType.COMMA)
         
         # String literals
         elif char == '"':

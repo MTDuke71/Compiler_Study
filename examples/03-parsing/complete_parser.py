@@ -57,68 +57,14 @@ ast = parser.parse()
 print_ast(ast)
 """
 
-from enum import Enum, auto
+import sys
+import os
+# Import unified token types
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from token_types import Token, TokenType
+
 from dataclasses import dataclass
 from typing import List, Optional, Any
-
-
-# ============================================================================
-# Token Types
-# ============================================================================
-
-class TokenType(Enum):
-    # Literals
-    INT = auto()
-    FLOAT = auto()
-    STRING = auto()
-    TRUE = auto()
-    FALSE = auto()
-    
-    # Identifiers
-    ID = auto()
-    
-    # Keywords
-    VAR = auto()
-    IF = auto()
-    ELSE = auto()
-    WHILE = auto()
-    RETURN = auto()
-    FN = auto()
-    
-    # Operators
-    PLUS = auto()
-    MINUS = auto()
-    STAR = auto()
-    SLASH = auto()
-    BANG = auto()
-    ASSIGN = auto()
-    EQ = auto()
-    NE = auto()
-    LT = auto()
-    LE = auto()
-    GT = auto()
-    GE = auto()
-    AND = auto()
-    OR = auto()
-    
-    # Delimiters
-    LPAREN = auto()
-    RPAREN = auto()
-    LBRACE = auto()
-    RBRACE = auto()
-    SEMICOLON = auto()
-    COMMA = auto()
-    
-    # Special
-    EOF = auto()
-
-
-@dataclass
-class Token:
-    type: TokenType
-    value: Any
-    line: int
-    column: int
 
 
 # ============================================================================
@@ -233,7 +179,7 @@ class Lexer:
             'else': TokenType.ELSE,
             'while': TokenType.WHILE,
             'return': TokenType.RETURN,
-            'fn': TokenType.FN,
+            'fn': TokenType.FUNCTION,  # Using unified FUNCTION
             'true': TokenType.TRUE,
             'false': TokenType.FALSE,
         }
@@ -281,16 +227,15 @@ class Lexer:
             num_str += self.current_char()
             self.advance()
         
-        if is_float:
-            return Token(TokenType.FLOAT, float(num_str), start_line, start_col)
-        else:
-            return Token(TokenType.INT, int(num_str), start_line, start_col)
+        value = float(num_str) if is_float else int(num_str)
+        return Token(TokenType.NUMBER, value, num_str, start_line, start_col)
     
     def read_string(self) -> Token:
         """Read string literal"""
         start_line = self.line
         start_col = self.column
         
+        opening_quote_pos = self.position - 1  # We already advanced past opening quote
         self.advance()  # Skip opening quote
         string = ''
         
@@ -315,7 +260,9 @@ class Lexer:
         if self.current_char() == '"':
             self.advance()  # Skip closing quote
         
-        return Token(TokenType.STRING, string, start_line, start_col)
+        # lexeme includes the quotes
+        lexeme = self.source[opening_quote_pos:self.position]
+        return Token(TokenType.STRING, string, lexeme, start_line, start_col)
     
     def read_identifier(self) -> Token:
         """Read identifier or keyword"""
@@ -328,10 +275,11 @@ class Lexer:
             self.advance()
         
         # Check if it's a keyword
-        token_type = self.keywords.get(ident, TokenType.ID)
-        value = ident if token_type == TokenType.ID else None
+        token_type = self.keywords.get(ident, TokenType.IDENTIFIER)
+        # Keywords and identifiers have None value per contract
+        value = None
         
-        return Token(token_type, value, start_line, start_col)
+        return Token(token_type, value, ident, start_line, start_col)
     
     def tokenize(self) -> List[Token]:
         """Tokenize entire source code"""
@@ -361,83 +309,83 @@ class Lexer:
             
             # Two-character operators
             elif ch == '=' and self.peek_char() == '=':
-                self.tokens.append(Token(TokenType.EQ, None, line, col))
+                self.tokens.append(Token(TokenType.EQUAL_EQUAL, None, '==', line, col))
                 self.advance()
                 self.advance()
             
             elif ch == '!' and self.peek_char() == '=':
-                self.tokens.append(Token(TokenType.NE, None, line, col))
+                self.tokens.append(Token(TokenType.NOT_EQUAL, None, '!=', line, col))
                 self.advance()
                 self.advance()
             
             elif ch == '<' and self.peek_char() == '=':
-                self.tokens.append(Token(TokenType.LE, None, line, col))
+                self.tokens.append(Token(TokenType.LESS_EQUAL, None, '<=', line, col))
                 self.advance()
                 self.advance()
             
             elif ch == '>' and self.peek_char() == '=':
-                self.tokens.append(Token(TokenType.GE, None, line, col))
+                self.tokens.append(Token(TokenType.GREATER_EQUAL, None, '>=', line, col))
                 self.advance()
                 self.advance()
             
             elif ch == '&' and self.peek_char() == '&':
-                self.tokens.append(Token(TokenType.AND, None, line, col))
+                self.tokens.append(Token(TokenType.AND, None, '&&', line, col))
                 self.advance()
                 self.advance()
             
             elif ch == '|' and self.peek_char() == '|':
-                self.tokens.append(Token(TokenType.OR, None, line, col))
+                self.tokens.append(Token(TokenType.OR, None, '||', line, col))
                 self.advance()
                 self.advance()
             
             # Single-character operators and delimiters
             elif ch == '+':
-                self.tokens.append(Token(TokenType.PLUS, None, line, col))
+                self.tokens.append(Token(TokenType.PLUS, None, '+', line, col))
                 self.advance()
             elif ch == '-':
-                self.tokens.append(Token(TokenType.MINUS, None, line, col))
+                self.tokens.append(Token(TokenType.MINUS, None, '-', line, col))
                 self.advance()
             elif ch == '*':
-                self.tokens.append(Token(TokenType.STAR, None, line, col))
+                self.tokens.append(Token(TokenType.STAR, None, '*', line, col))
                 self.advance()
             elif ch == '/':
-                self.tokens.append(Token(TokenType.SLASH, None, line, col))
+                self.tokens.append(Token(TokenType.SLASH, None, '/', line, col))
                 self.advance()
             elif ch == '!':
-                self.tokens.append(Token(TokenType.BANG, None, line, col))
+                self.tokens.append(Token(TokenType.NOT, None, '!', line, col))
                 self.advance()
             elif ch == '=':
-                self.tokens.append(Token(TokenType.ASSIGN, None, line, col))
+                self.tokens.append(Token(TokenType.ASSIGN, None, '=', line, col))
                 self.advance()
             elif ch == '<':
-                self.tokens.append(Token(TokenType.LT, None, line, col))
+                self.tokens.append(Token(TokenType.LESS, None, '<', line, col))
                 self.advance()
             elif ch == '>':
-                self.tokens.append(Token(TokenType.GT, None, line, col))
+                self.tokens.append(Token(TokenType.GREATER, None, '>', line, col))
                 self.advance()
             elif ch == '(':
-                self.tokens.append(Token(TokenType.LPAREN, None, line, col))
+                self.tokens.append(Token(TokenType.LPAREN, None, '(', line, col))
                 self.advance()
             elif ch == ')':
-                self.tokens.append(Token(TokenType.RPAREN, None, line, col))
+                self.tokens.append(Token(TokenType.RPAREN, None, ')', line, col))
                 self.advance()
             elif ch == '{':
-                self.tokens.append(Token(TokenType.LBRACE, None, line, col))
+                self.tokens.append(Token(TokenType.LBRACE, None, '{', line, col))
                 self.advance()
             elif ch == '}':
-                self.tokens.append(Token(TokenType.RBRACE, None, line, col))
+                self.tokens.append(Token(TokenType.RBRACE, None, '}', line, col))
                 self.advance()
             elif ch == ';':
-                self.tokens.append(Token(TokenType.SEMICOLON, None, line, col))
+                self.tokens.append(Token(TokenType.SEMICOLON, None, ';', line, col))
                 self.advance()
             elif ch == ',':
-                self.tokens.append(Token(TokenType.COMMA, None, line, col))
+                self.tokens.append(Token(TokenType.COMMA, None, ',', line, col))
                 self.advance()
             else:
                 raise Exception(f"Unexpected character '{ch}' at line {line}, column {col}")
         
         # Add EOF token
-        self.tokens.append(Token(TokenType.EOF, None, self.line, self.column))
+        self.tokens.append(Token(TokenType.EOF, None, '', self.line, self.column))
         
         return self.tokens
 
@@ -460,7 +408,7 @@ class Parser:
     def __init__(self, tokens: List[Token]):
         self.tokens = tokens
         self.position = 0
-        self.current_token = tokens[0] if tokens else Token(TokenType.EOF, None, 0, 0)
+        self.current_token = tokens[0] if tokens else Token(TokenType.EOF, None, '', 0, 0)
         self.scopes = [{}]  # Stack of scopes (for minimal tracking)
     
     # ========================================================================
@@ -528,7 +476,7 @@ class Parser:
         declarations = []
         
         while not self.at_end():
-            if self.match(TokenType.FN):
+            if self.match(TokenType.FUNCTION):
                 declarations.append(self.parse_function_decl())
             else:
                 declarations.append(self.parse_statement())
@@ -544,19 +492,22 @@ class Parser:
         FunctionDecl → 'fn' ID '(' ParamList? ')' Block
         ParamList → ID (',' ID)*
         """
-        self.expect(TokenType.FN)
+        self.expect(TokenType.FUNCTION)
         
-        name = self.expect(TokenType.ID).value
+        name_token = self.expect(TokenType.IDENTIFIER)
+        name = name_token.lexeme  # Use lexeme per contract
         
         self.expect(TokenType.LPAREN)
         
         # Parse parameter list
         parameters = []
         if not self.match(TokenType.RPAREN):
-            parameters.append(self.expect(TokenType.ID).value)
+            param_token = self.expect(TokenType.IDENTIFIER)
+            parameters.append(param_token.lexeme)
             while self.match(TokenType.COMMA):
                 self.advance()
-                parameters.append(self.expect(TokenType.ID).value)
+                param_token = self.expect(TokenType.IDENTIFIER)
+                parameters.append(param_token.lexeme)
         
         self.expect(TokenType.RPAREN)
         
@@ -615,7 +566,8 @@ class Parser:
         """
         self.expect(TokenType.VAR)
         
-        name = self.expect(TokenType.ID).value
+        name_token = self.expect(TokenType.IDENTIFIER)
+        name = name_token.lexeme  # Use lexeme per contract
         
         # Track declaration in current scope
         self.declare_variable(name)
@@ -775,7 +727,7 @@ class Parser:
         """
         node = self.parse_comparison()
         
-        while self.match(TokenType.EQ, TokenType.NE):
+        while self.match(TokenType.EQUAL_EQUAL, TokenType.NOT_EQUAL):
             op = self.current_token.type
             self.advance()
             right = self.parse_comparison()
@@ -789,7 +741,7 @@ class Parser:
         """
         node = self.parse_addition()
         
-        while self.match(TokenType.LT, TokenType.LE, TokenType.GT, TokenType.GE):
+        while self.match(TokenType.LESS, TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL):
             op = self.current_token.type
             self.advance()
             right = self.parse_addition()
@@ -831,7 +783,7 @@ class Parser:
         
         Right-associative via recursion.
         """
-        if self.match(TokenType.BANG, TokenType.MINUS):
+        if self.match(TokenType.NOT, TokenType.MINUS):
             op = self.current_token.type
             self.advance()
             operand = self.parse_unary()  # Right recursion
@@ -844,17 +796,15 @@ class Parser:
         Primary → Literal | Identifier | FunctionCall | '(' Expression ')'
         Literal → INT | FLOAT | STRING | BOOL
         """
-        # Integer literal
-        if self.match(TokenType.INT):
+        # Number literal (int or float)
+        if self.match(TokenType.NUMBER):
             value = self.current_token.value
             self.advance()
-            return IntLiteral(value)
-        
-        # Float literal
-        if self.match(TokenType.FLOAT):
-            value = self.current_token.value
-            self.advance()
-            return FloatLiteral(value)
+            # Check if it's int or float
+            if isinstance(value, int):
+                return IntLiteral(value)
+            else:
+                return FloatLiteral(value)
         
         # String literal
         if self.match(TokenType.STRING):
@@ -872,8 +822,8 @@ class Parser:
             return BoolLiteral(False)
         
         # Identifier or function call
-        if self.match(TokenType.ID):
-            name = self.current_token.value
+        if self.match(TokenType.IDENTIFIER):
+            name = self.current_token.lexeme  # Use lexeme per contract
             self.advance()
             
             # Check for function call (LL(2) - look ahead 1 token)

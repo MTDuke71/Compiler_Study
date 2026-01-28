@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd d:\\\\repos\\\\Compiler_Study\\\\examples\\\\03-parsing; python basic-parser\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

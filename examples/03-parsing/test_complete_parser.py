@@ -56,12 +56,12 @@ class TestResult:
     
     def record_pass(self, test_name: str):
         self.passed += 1
-        print(f"✓ {test_name}")
+        print(f"[PASS] {test_name}")
     
     def record_fail(self, test_name: str, error: str):
         self.failed += 1
         self.errors.append((test_name, error))
-        print(f"✗ {test_name}: {error}")
+        print(f"[FAIL] {test_name}: {error}")
     
     def print_summary(self):
         total = self.passed + self.failed
@@ -128,7 +128,7 @@ def test_precedence_unary():
 def test_precedence_comparison():
     ast = parse_expr("2 + 3 < 4 * 5")
     assert isinstance(ast, BinaryOp)
-    assert ast.op == TokenType.LT
+    assert ast.op == TokenType.LESS
     assert isinstance(ast.left, BinaryOp)
     assert ast.left.op == TokenType.PLUS
     assert isinstance(ast.right, BinaryOp)
@@ -420,9 +420,9 @@ def test_chained_comparison():
 def test_mixed_unary():
     ast = parse_expr("!!true")
     assert isinstance(ast, UnaryOp)
-    assert ast.op == TokenType.BANG
+    assert ast.op == TokenType.NOT
     assert isinstance(ast.operand, UnaryOp)
-    assert ast.operand.op == TokenType.BANG
+    assert ast.operand.op == TokenType.NOT
 
 
 @test("Assignment in expression")
