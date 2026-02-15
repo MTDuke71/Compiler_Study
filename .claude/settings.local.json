@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(ls -la \"D:\\\\repos\\\\Compiler_Study\\\\Stanford\"\" 2>/dev/null || dir \"D:reposCompiler_StudyStanford\"\")"
-    ]
-  }
-}
