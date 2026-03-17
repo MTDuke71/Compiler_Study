@@ -44,3 +44,4 @@ wheels/
 *.egg
 .claude/settings.local.json
 .vscode/settings.json
+AI_README.md
