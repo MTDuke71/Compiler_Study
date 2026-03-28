@@ -1,0 +1,5 @@
+[package]
+name = "lox-rs"
+version = "0.1.0"
+edition = "2021"
+description = "A Rust implementation of the Lox language from Crafting Interpreters"
