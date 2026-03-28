@@ -205,3 +205,158 @@ impl Scanner {
         self.had_error = true;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::token::{Literal, TokenType};
+
+    fn token_types(source: &str) -> Vec<TokenType> {
+        let mut scanner = Scanner::new(source);
+        scanner.scan_tokens().into_iter().map(|t| t.token_type).collect()
+    }
+
+    #[test]
+    fn single_char_tokens() {
+        let types = token_types("(){},.-+;/*");
+        assert_eq!(
+            types,
+            vec![
+                TokenType::LeftParen,
+                TokenType::RightParen,
+                TokenType::LeftBrace,
+                TokenType::RightBrace,
+                TokenType::Comma,
+                TokenType::Dot,
+                TokenType::Minus,
+                TokenType::Plus,
+                TokenType::Semicolon,
+                TokenType::Slash,
+                TokenType::Star,
+                TokenType::Eof,
+            ]
+        );
+    }
+
+    #[test]
+    fn two_char_tokens() {
+        let types = token_types("!= == >= <=");
+        assert_eq!(
+            types,
+            vec![
+                TokenType::BangEqual,
+                TokenType::EqualEqual,
+                TokenType::GreaterEqual,
+                TokenType::LessEqual,
+                TokenType::Eof,
+            ]
+        );
+    }
+
+    #[test]
+    fn single_without_second_char() {
+        // Each should produce the single-char version, not the two-char version
+        let types = token_types("! = > <");
+        assert_eq!(
+            types,
+            vec![
+                TokenType::Bang,
+                TokenType::Equal,
+                TokenType::Greater,
+                TokenType::Less,
+                TokenType::Eof,
+            ]
+        );
+    }
+
+    #[test]
+    fn string_literal_value() {
+        let mut scanner = Scanner::new(r#""hello""#);
+        let tokens = scanner.scan_tokens();
+        assert!(!scanner.had_error);
+        assert_eq!(tokens[0].token_type, TokenType::String);
+        assert_eq!(tokens[0].literal, Some(Literal::String("hello".to_string())));
+    }
+
+    #[test]
+    fn number_integer() {
+        let mut scanner = Scanner::new("42");
+        let tokens = scanner.scan_tokens();
+        assert_eq!(tokens[0].token_type, TokenType::Number);
+        assert_eq!(tokens[0].literal, Some(Literal::Number(42.0)));
+    }
+
+    #[test]
+    fn number_float() {
+        let mut scanner = Scanner::new("3.14");
+        let tokens = scanner.scan_tokens();
+        assert_eq!(tokens[0].literal, Some(Literal::Number(3.14)));
+    }
+
+    #[test]
+    fn keywords_recognised() {
+        let types = token_types("and class else false for fun if nil or print return true var while");
+        assert_eq!(
+            types,
+            vec![
+                TokenType::And,
+                TokenType::Class,
+                TokenType::Else,
+                TokenType::False,
+                TokenType::For,
+                TokenType::Fun,
+                TokenType::If,
+                TokenType::Nil,
+                TokenType::Or,
+                TokenType::Print,
+                TokenType::Return,
+                TokenType::True,
+                TokenType::Var,
+                TokenType::While,
+                TokenType::Eof,
+            ]
+        );
+    }
+
+    #[test]
+    fn keyword_prefix_is_identifier() {
+        // "andx" and "classy" share prefixes with keywords but are identifiers
+        let types = token_types("andx classy");
+        assert_eq!(types, vec![TokenType::Identifier, TokenType::Identifier, TokenType::Eof]);
+    }
+
+    #[test]
+    fn comment_is_skipped() {
+        let types = token_types("// this whole line is a comment");
+        assert_eq!(types, vec![TokenType::Eof]);
+    }
+
+    #[test]
+    fn whitespace_is_skipped() {
+        let types = token_types("   \t  \n  ");
+        assert_eq!(types, vec![TokenType::Eof]);
+    }
+
+    #[test]
+    fn multiline_tracks_line_number() {
+        let mut scanner = Scanner::new("1\n2\n3");
+        let tokens = scanner.scan_tokens();
+        assert_eq!(tokens[0].line, 1);
+        assert_eq!(tokens[1].line, 2);
+        assert_eq!(tokens[2].line, 3);
+    }
+
+    #[test]
+    fn unterminated_string_sets_error() {
+        let mut scanner = Scanner::new(r#""oops"#);
+        scanner.scan_tokens();
+        assert!(scanner.had_error);
+    }
+
+    #[test]
+    fn unexpected_char_sets_error() {
+        let mut scanner = Scanner::new("@");
+        scanner.scan_tokens();
+        assert!(scanner.had_error);
+    }
+}

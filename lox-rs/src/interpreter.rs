@@ -220,3 +220,206 @@ fn number_op(
         _ => Err("Operands must be numbers.".to_string()),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::ast::Stmt;
+    use crate::parser::Parser;
+    use crate::scanner::Scanner;
+
+    /// Scan → parse → evaluate a single expression (no trailing semicolon needed).
+    fn eval(expr_source: &str) -> Result<Literal, String> {
+        let source = format!("{expr_source};");
+        let mut scanner = Scanner::new(&source);
+        let tokens = scanner.scan_tokens();
+        let mut parser = Parser::new(tokens);
+        let stmts = parser.parse();
+        let mut interp = Interpreter::new();
+        match stmts.into_iter().next() {
+            Some(Stmt::Expression { expression }) => interp.evaluate(&expression),
+            _ => Err("Expected expression statement".to_string()),
+        }
+    }
+
+    /// Run full Lox source; returns true if a runtime error occurred.
+    fn run(source: &str) -> bool {
+        let mut scanner = Scanner::new(source);
+        let tokens = scanner.scan_tokens();
+        let mut parser = Parser::new(tokens);
+        let stmts = parser.parse();
+        let mut interp = Interpreter::new();
+        interp.interpret(&stmts);
+        interp.had_runtime_error
+    }
+
+    // ── Literals ──────────────────────────────────────────────
+
+    #[test]
+    fn number_literal() {
+        assert_eq!(eval("42"), Ok(Literal::Number(42.0)));
+    }
+
+    #[test]
+    fn string_literal() {
+        assert_eq!(eval(r#""hello""#), Ok(Literal::String("hello".to_string())));
+    }
+
+    #[test]
+    fn bool_literal() {
+        assert_eq!(eval("true"), Ok(Literal::Bool(true)));
+        assert_eq!(eval("false"), Ok(Literal::Bool(false)));
+    }
+
+    #[test]
+    fn nil_literal() {
+        assert_eq!(eval("nil"), Ok(Literal::Nil));
+    }
+
+    // ── Arithmetic ────────────────────────────────────────────
+
+    #[test]
+    fn arithmetic_precedence() {
+        // * binds tighter: 2 + (3 * 4) = 14
+        assert_eq!(eval("2 + 3 * 4"), Ok(Literal::Number(14.0)));
+    }
+
+    #[test]
+    fn subtraction() {
+        assert_eq!(eval("10 - 3"), Ok(Literal::Number(7.0)));
+    }
+
+    #[test]
+    fn division() {
+        assert_eq!(eval("10 / 4"), Ok(Literal::Number(2.5)));
+    }
+
+    #[test]
+    fn unary_negate() {
+        assert_eq!(eval("-5"), Ok(Literal::Number(-5.0)));
+    }
+
+    // ── Unary bang ────────────────────────────────────────────
+
+    #[test]
+    fn bang_true_is_false() {
+        assert_eq!(eval("!true"), Ok(Literal::Bool(false)));
+    }
+
+    #[test]
+    fn bang_nil_is_true() {
+        // nil is falsy, so !nil = true
+        assert_eq!(eval("!nil"), Ok(Literal::Bool(true)));
+    }
+
+    #[test]
+    fn bang_number_is_false() {
+        // any number is truthy
+        assert_eq!(eval("!42"), Ok(Literal::Bool(false)));
+    }
+
+    // ── Strings ───────────────────────────────────────────────
+
+    #[test]
+    fn string_concatenation() {
+        assert_eq!(
+            eval(r#""foo" + "bar""#),
+            Ok(Literal::String("foobar".to_string()))
+        );
+    }
+
+    #[test]
+    fn number_plus_string_is_error() {
+        assert!(eval(r#"1 + "oops""#).is_err());
+    }
+
+    // ── Comparisons ───────────────────────────────────────────
+
+    #[test]
+    fn comparison_greater() {
+        assert_eq!(eval("3 > 2"), Ok(Literal::Bool(true)));
+        assert_eq!(eval("2 > 3"), Ok(Literal::Bool(false)));
+    }
+
+    #[test]
+    fn comparison_less_equal() {
+        assert_eq!(eval("1 <= 1"), Ok(Literal::Bool(true)));
+        assert_eq!(eval("2 <= 1"), Ok(Literal::Bool(false)));
+    }
+
+    // ── Equality ──────────────────────────────────────────────
+
+    #[test]
+    fn nil_equals_nil() {
+        assert_eq!(eval("nil == nil"), Ok(Literal::Bool(true)));
+    }
+
+    #[test]
+    fn inequality() {
+        assert_eq!(eval("1 != 2"), Ok(Literal::Bool(true)));
+        assert_eq!(eval("1 != 1"), Ok(Literal::Bool(false)));
+    }
+
+    // ── Logical ───────────────────────────────────────────────
+
+    #[test]
+    fn logical_and() {
+        assert_eq!(eval("true and true"),  Ok(Literal::Bool(true)));
+        assert_eq!(eval("true and false"), Ok(Literal::Bool(false)));
+        assert_eq!(eval("false and true"), Ok(Literal::Bool(false)));
+    }
+
+    #[test]
+    fn logical_or() {
+        assert_eq!(eval("true or false"),  Ok(Literal::Bool(true)));
+        assert_eq!(eval("false or false"), Ok(Literal::Bool(false)));
+    }
+
+    #[test]
+    fn logical_and_returns_left_on_falsy() {
+        // Lox returns the actual value, not a bool — nil and 2 => nil
+        assert_eq!(eval("nil and 2"), Ok(Literal::Nil));
+    }
+
+    #[test]
+    fn logical_or_short_circuits_on_truthy() {
+        // 1 or 2 => 1 (left is returned, right never evaluated)
+        assert_eq!(eval("1 or 2"), Ok(Literal::Number(1.0)));
+    }
+
+    // ── Variables ─────────────────────────────────────────────
+
+    #[test]
+    fn variable_declaration_no_error() {
+        assert!(!run("var x = 10;"), "Expected no runtime error");
+    }
+
+    #[test]
+    fn variable_assignment_no_error() {
+        assert!(!run("var x = 1; x = 2;"), "Expected no runtime error");
+    }
+
+    #[test]
+    fn undefined_variable_is_runtime_error() {
+        assert!(run("print x;"), "Expected runtime error for undefined var");
+    }
+
+    #[test]
+    fn block_scoping_does_not_leak() {
+        // x is defined only inside the block; using it outside should error
+        assert!(run("{ var x = 1; } print x;"));
+    }
+
+    // ── Control flow ──────────────────────────────────────────
+
+    #[test]
+    fn if_true_branch_runs() {
+        // If this completes without runtime error the then-branch ran
+        assert!(!run("var x = 0; if (true) { x = 1; }"));
+    }
+
+    #[test]
+    fn while_false_never_runs() {
+        assert!(!run("while (false) { print undefined_var; }"));
+    }
+}

@@ -503,3 +503,116 @@ impl Parser {
         self.had_error = true;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::ast::{Expr, Stmt};
+    use crate::scanner::Scanner;
+
+    fn parse(source: &str) -> (Vec<Stmt>, bool) {
+        let mut scanner = Scanner::new(source);
+        let tokens = scanner.scan_tokens();
+        let mut parser = Parser::new(tokens);
+        let stmts = parser.parse();
+        (stmts, parser.had_error)
+    }
+
+    #[test]
+    fn number_expression_statement() {
+        let (stmts, had_error) = parse("42;");
+        assert!(!had_error);
+        assert_eq!(stmts.len(), 1);
+        assert!(matches!(stmts[0], Stmt::Expression { .. }));
+    }
+
+    #[test]
+    fn binary_expression_structure() {
+        let (stmts, had_error) = parse("1 + 2;");
+        assert!(!had_error);
+        assert!(matches!(
+            &stmts[0],
+            Stmt::Expression { expression: Expr::Binary { .. } }
+        ));
+    }
+
+    #[test]
+    fn var_with_initializer() {
+        let (stmts, had_error) = parse("var x = 5;");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::Var { initializer: Some(_), .. }));
+    }
+
+    #[test]
+    fn var_without_initializer() {
+        let (stmts, had_error) = parse("var x;");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::Var { initializer: None, .. }));
+    }
+
+    #[test]
+    fn if_without_else() {
+        let (stmts, had_error) = parse("if (true) { 1; }");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::If { else_branch: None, .. }));
+    }
+
+    #[test]
+    fn if_with_else() {
+        let (stmts, had_error) = parse("if (true) { 1; } else { 2; }");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::If { else_branch: Some(_), .. }));
+    }
+
+    #[test]
+    fn while_statement_parses() {
+        let (stmts, had_error) = parse("while (false) {}");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::While { .. }));
+    }
+
+    #[test]
+    fn for_without_clauses_desugars_to_while() {
+        // for(;;){} has no initializer, so outermost node is While directly
+        let (stmts, had_error) = parse("for (;;) {}");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::While { .. }));
+    }
+
+    #[test]
+    fn for_with_initializer_desugars_to_block_containing_while() {
+        // for(var i=0; i<10; i=i+1){} — initializer present, so wrapped in Block
+        let (stmts, had_error) = parse("for (var i = 0; i < 10; i = i + 1) {}");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::Block { .. }));
+    }
+
+    #[test]
+    fn function_declaration() {
+        let (stmts, had_error) = parse("fun add(a, b) { return a + b; }");
+        assert!(!had_error);
+        match &stmts[0] {
+            Stmt::Function { params, .. } => assert_eq!(params.len(), 2),
+            _ => panic!("Expected function declaration"),
+        }
+    }
+
+    #[test]
+    fn print_statement_parses() {
+        let (stmts, had_error) = parse("print 42;");
+        assert!(!had_error);
+        assert!(matches!(&stmts[0], Stmt::Print { .. }));
+    }
+
+    #[test]
+    fn missing_semicolon_sets_error() {
+        let (_, had_error) = parse("var x = 5");
+        assert!(had_error);
+    }
+
+    #[test]
+    fn unclosed_paren_sets_error() {
+        let (_, had_error) = parse("(1 + 2;");
+        assert!(had_error);
+    }
+}
