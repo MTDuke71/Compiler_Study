@@ -95,17 +95,17 @@ impl Interpreter {
     }
 
     fn execute_block(&mut self, statements: &[Stmt]) -> Result<(), String> {
-        let previous = self.environment.clone();
-        self.environment = Environment::with_enclosing(previous.clone());
+        // Move (not clone) the current env into the enclosing position of a
+        // new inner scope. This way mutations to outer variables inside the
+        // block are preserved when we pop back.
+        let outer = std::mem::replace(&mut self.environment, Environment::new());
+        self.environment = Environment::with_enclosing(outer);
 
-        let result = (|| {
-            for stmt in statements {
-                self.execute(stmt)?;
-            }
-            Ok(())
-        })();
+        let result = statements.iter().try_for_each(|stmt| self.execute(stmt));
 
-        self.environment = previous;
+        // Pop scope: discard inner locals, restore the (possibly mutated) enclosing env.
+        let inner = std::mem::replace(&mut self.environment, Environment::new());
+        self.environment = *inner.enclosing.unwrap();
         result
     }
 

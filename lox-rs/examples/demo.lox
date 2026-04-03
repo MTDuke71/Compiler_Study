@@ -1,0 +1,72 @@
+// ── lox-rs pipeline demo ──────────────────────────────────
+// Exercises every feature the interpreter currently supports.
+
+// 1. Literals
+print 42;
+print 3.14;
+print "hello, lox";
+print true;
+print nil;
+
+// 2. Arithmetic & precedence
+print 2 + 3 * 4;       // 14  (* binds tighter)
+print (2 + 3) * 4;     // 20  (grouping overrides)
+print 10 - 3;           // 7
+print 10 / 4;           // 2.5
+
+// 3. Unary operators
+print -5;               // -5
+print !false;           // true
+print !nil;             // true  (nil is falsy)
+
+// 4. String concatenation
+print "foo" + "bar";    // foobar
+
+// 5. Comparisons & equality
+print 3 > 2;            // true
+print 1 <= 1;           // true
+print 1 != 2;           // true
+print nil == nil;       // true
+
+// 6. Variables & assignment
+var x = 10;
+print x;                // 10
+x = x + 5;
+print x;                // 15
+
+// 7. Block scoping
+var outer = "outside";
+{
+    var inner = "inside";
+    print inner;        // inside
+    print outer;        // outside
+}
+print outer;            // outside
+// inner is not accessible here — would be a runtime error
+
+// 8. If / else
+if (x > 10) {
+    print "x is big";
+} else {
+    print "x is small";
+}
+
+// 9. Logical operators (short-circuit)
+print true and false;   // false
+print false or true;    // true
+print nil or "default"; // default  (nil is falsy, returns right)
+print "first" and "second"; // second  (truthy, returns right)
+
+// 10. While loop
+var i = 0;
+while (i < 5) {
+    print i;
+    i = i + 1;
+}
+
+// 11. For loop (desugars to while)
+var sum = 0;
+for (var j = 1; j <= 10; j = j + 1) {
+    sum = sum + j;
+}
+print sum;              // 55
