@@ -1,6 +1,6 @@
 ## Links
 - Up: [[02-lexing/README]]
-- Related: [[02-lexing/regular-languages]] [[02-lexing/tokens-vs-characters]] [[02-lexing/failure-modes]]
+- Related: [[02-lexing/regular-languages]] [[02-lexing/tokens-vs-characters]] [[02-lexing/failure-modes]] [[lox-rs/src/scanner.rs]]
 - Down:
 
 ---
@@ -18,6 +18,8 @@
 > - [`README.md`](../../examples/02-lexing/README.md) - Usage guide and experiments  
 >
 > **Run immediately:** `cd examples/02-lexing && python lexer_minimal.py`
+>
+> **🦀 Rust implementation:** [`lox-rs/src/scanner.rs`](../lox-rs/src/scanner.rs) - Hand-written scanner from Crafting Interpreters Ch. 4. Same patterns (advance/peek/match, maximal munch, keyword table) in Rust with no global state.
 
 ---
 

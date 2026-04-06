@@ -45,3 +45,6 @@ wheels/
 .claude/settings.local.json
 .vscode/settings.json
 AI_README.md
+
+# lox-rs generated output
+lox-rs/output/
