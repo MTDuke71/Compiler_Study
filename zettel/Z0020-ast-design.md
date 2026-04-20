@@ -2,7 +2,7 @@
 
 ## Links
 - Up: [[03-parsing/trees-vs-structure]]
-- Related: [[03-parsing/recursive-descent]] [[05-ir/why-ast-is-not-enough]] [[04-semantics/README]]
+- Related: [[03-parsing/recursive-descent]] [[05-ir/why-ast-is-not-enough]] [[04-semantics/README]] [[zettel/Z0024-sum-types-and-expression-problem]]
 - Down: [[zettel/Z0021-recursive-descent-pattern]] [[zettel/Z0023-ambiguity-resolution]]
 
 ---

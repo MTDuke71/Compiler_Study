@@ -10,6 +10,18 @@
 
 ## Three-Letter Acronyms (TLAs)
 
+### ADT — Algebraic Data Type
+A type built by composing two operations:
+- **Sum** (variant): a value is *one of* several alternatives (Rust `enum`, ML `variant`)
+- **Product** (record): a value has *all of* several fields (`struct`, tuple)
+- "Algebraic" because value counts follow real algebra: product multiplies, sum adds
+- Consumed via **pattern matching**, which the typechecker can prove exhaustive
+- Native shape of every compiler IR: AST, tokens, TAC, SSA, target instructions
+- Solves the **Expression Problem** without needing the Visitor pattern
+- **Note:** In older CS literature, ADT means *Abstract Data Type* (a type defined by its operations — Stack, Queue). Modern FP/Rust usage means Algebraic.
+- Example: `Expr` enum in [[../lox-rs/src/ast.rs]] is a sum of products
+- See: [[zettel/Z0024-sum-types-and-expression-problem]] [[03-parsing/README]] [[05-ir/README]]
+
 ### AST — Abstract Syntax Tree
 A tree representation of source code structure where:
 - Each node represents a language construct (expression, statement, declaration)
@@ -236,6 +248,16 @@ A grammar rule where:
 - Must be eliminated for LL parsing
 - See: [[03-parsing/README]]
 
+### Linear Scan Allocation
+A simple register allocation algorithm:
+- Single pass through instructions in order
+- Assign registers as variables become live
+- Spill to memory when out of registers
+- Fast to compile (~200 lines of code)
+- 95% as good as graph coloring in practice
+- Used in V8, HotSpot, LuaJIT (production JITs)
+- See: [[07-codegen/registers-are-scarce]]
+
 ### Phi Function
 In SSA form:
 - Special function at CFG merge points
@@ -277,17 +299,7 @@ Whether operators group left-to-right or right-to-left:
 
 ### Precedence
 Operator priority in parsing:
-- Highnear Scan Allocation
-A simple register allocation algorithm:
-- Single pass through instructions in order
-- Assign registers as variables become live
-- Spill to memory when out of registers
-- Fast to compile (~200 lines of code)
-- 95% as good as graph coloring in practice
-- Used in V8, HotSpot, LuaJIT (production JITs)
-- See: [[07-codegen/registers-are-scarce]]
-
-### Lier precedence binds tighter
+- Higher precedence binds tighter
 - Example: `*` before `+` means `2 + 3 * 4` = `2 + (3 * 4)`
 - See: [[03-parsing/precedence-and-associativity]]
 
